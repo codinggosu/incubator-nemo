@@ -82,14 +82,28 @@ public final class AutoCachingPass extends AnnotatingPass {
         //iterate over each transformation and make subdag to compare
         for (String passName : transformOrder.keySet()) {
             ArrayList<IRVertex> vertices = transformOrder.get(passName);
+            // ArrayList<IRVertex> beginEnd = new ArrayList<IRVertex>(2);
             IRVertex[] beginEnd = new IRVertex[2];
-            ArrayList<IRVertex[]> subDags = new ArrayList<IRVertex[]>();
+            // ArrayList<ArrayList<IRVertex>> subDags = new ArrayList<ArrayList<IRVertex>>();
             for (int i = 0; i < vertices.size(); i++) {
                 for (int j = i + 1; j < vertices.size(); j++) {
                     beginEnd[0] = vertices.get(i);
                     beginEnd[1] = vertices.get(j);
-                    subDags.add(beginEnd);
+                    // beginEnd.set(0, vertices.get(i));
+                    // beginEnd.set(1, vertices.get(j));
+                    // subDags.add(beginEnd);
+                    LOG.info("begin {} end {} ", beginEnd[0].getNumericId(), beginEnd[1].getNumericId());
                     List<ArrayList<IRVertex>> test = getAllPathsBetween(dag, beginEnd[0], beginEnd[1]);
+                    LOG.info("PASS NAME {} ", passName);
+                    LOG.info("begin  {} end {} ", beginEnd[0], beginEnd[1]);
+                    LOG.info("all paths length {} ", test.size());
+                    for (ArrayList<IRVertex> member : test) {
+                        LOG.info("first element {}, last element {}",  member.get(0), member.get(member.size() - 1));
+                        // for (IRVertex elem : member) {
+                        //     LOG.info("PATH FROM {} to {}", beginEnd.get(0).toString(), beginEnd.get(1).toString());
+                        //     LOG.info("element {}, num id {}", elem.toString(), elem.getNumericId());
+                        // }
+                    }
                     // LOG.info("BeginEnd for transformation {}, {}", passName, beginEnd);
                 }
             }
@@ -116,38 +130,46 @@ public final class AutoCachingPass extends AnnotatingPass {
      */
     public List<ArrayList<IRVertex>> getAllPathsBetween(final IRDAG dag, final IRVertex v1, final IRVertex v2) {
         ArrayList<ArrayList<IRVertex>> allPaths = new ArrayList<ArrayList<IRVertex>>();
+        if (!dag.pathExistsBetween(v1, v2)) {
+            return allPaths;
+        }
         HashSet<IRVertex> visited = new HashSet<IRVertex>();
         ArrayList<IRVertex> currentPath = new ArrayList<IRVertex>();
-        currentPath.add(v1);
-        addPathtoAllPaths(dag, v1, v2, visited, allPaths, currentPath);
+        // currentPath.add(v1);
+        currentPath = addPathtoAllPaths(dag, v1, v2, visited, currentPath);
+        if (currentPath != null && currentPath.size() > 0) {
+            allPaths.add(currentPath);
+        }
         return allPaths;
     }
     /**
      * Util function to add path.
-     * @param dag dag
-     * @param v1 source
-     * @param v1 destination
+     * @param dag         dag
+     * @param source      source
+     * @param destination destination
      * @param allPaths    all the paths
      * @param currentPath current path to add to
      */
-    public void addPathtoAllPaths(final IRDAG dag, final IRVertex v1, final IRVertex v2, final HashSet<IRVertex> visited,
-            final ArrayList<ArrayList<IRVertex>> allPaths, final ArrayList<IRVertex> currentPath) {
-        visited.add(v1);
-        if (v1.equals(v2)) {
-            allPaths.add(currentPath);
-            visited.remove(v1);
-            return;
+    public ArrayList<IRVertex> addPathtoAllPaths(final IRDAG dag, final IRVertex source, final IRVertex destination,
+            final HashSet<IRVertex> visited, final ArrayList<IRVertex> currentPath) {
+        // ArrayList<IRVertex> currentPath = new ArrayList<IRVertex>();
+        visited.add(source);
+        if (source.equals(destination)) {
+            return currentPath;
         }
-        for (IRVertex vertex : dag.getDescendants(v1.getId())) {
-            if (!visited.contains(vertex)) {
-                currentPath.add(vertex);
-                addPathtoAllPaths(dag, v1, v2, visited, allPaths, currentPath);
-                currentPath.remove(vertex);
+        for (IRVertex newSource : dag.getDescendants(source.getId())) {
+            if (!visited.contains(newSource)) {
+                currentPath.add(newSource);
+                addPathtoAllPaths(dag, newSource, destination, visited, currentPath);
+                // currentPath.remove(newSource);
             }
         }
-        visited.remove(v1);
+        if (currentPath.get(currentPath.size() - 1).equals(destination)) {
+            return currentPath;
+        }
+        return null;
+        //visited.remove(v1);
     }
-
     /**
      * Check if two subdags are the same in terms of operations performed.
      * @param IRDAG dag
