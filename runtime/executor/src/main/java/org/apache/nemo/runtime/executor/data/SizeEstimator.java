@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.nemo.runtime.executor.data;
+//import org.apache.reef.util.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,20 +89,33 @@ public final class SizeEstimator {
 
   public static long estimate(final Object obj, final IdentityHashMap map) {
     SearchState state = new SearchState(map);
-    state.enque(obj);
+    state.enqueue(obj);
     while (!state.isFinished()) {
-      visitSingleObject(state.deque(), state);
+      visitSingleObject(state.dequeue(), state);
     }
-    return state.size;
+    return state.getSize();
   }
+
+
+  private static long getCollectionSize(final Object collection) {
+    return ((List) collection).size();
+  }
+
+  public static Class getCollectionComponentType(final Object collection) {
+    return ((List) collection).get(0).getClass();
+  }
+  public static Object getCollectionElement(final Object collection, final int idx) {
+    return ((List) collection).get(idx);
+  }
+
   // Estimate the size of arrays larger than ARRAY_SIZE_FOR_SAMPLING by sampling.
   private static final int ARRAY_SIZE_FOR_SAMPLING = 400;
   private static final int ARRAY_SAMPLE_SIZE = 100; // should be lower than ARRAY_SIZE_FOR_SAMPLING
 
   private static void visitArray(final Object array, final Class cls, final SearchState state) {
     LOG.info("visit Array called obj {}, cls {}, state {}, state.size {}");
-    long length = Array.getLength(array);
-    Class elementClass = cls.getComponentType();
+    long length = cls.isArray() ? Array.getLength(array) : getCollectionSize(array);
+    Class elementClass = cls.isArray() ? cls.getComponentType() : getCollectionComponentType(array);
 
     // Arrays have object header and length field which is an integer
     long arrSize = alignSize(objectSize + INT_SIZE);
@@ -114,7 +128,9 @@ public final class SizeEstimator {
       if (length <= ARRAY_SIZE_FOR_SAMPLING) {
         var arrayIndex = 0;
         while (arrayIndex < length) {
-          state.enque(Array.get(array, arrayIndex));
+          Object selected = cls.isArray() ? Array.get(array, arrayIndex) : getCollectionElement(array, arrayIndex);
+          state.enqueue(selected);
+          LOG.info("state size {}", state.getSize());
           arrayIndex += 1;
         }
       } else {
@@ -141,13 +157,13 @@ public final class SizeEstimator {
 
 
 
-
-
   private static void visitSingleObject(final Object obj, final SearchState state) {
     LOG.info("VISIT SINGLE OBJECT CALLED");
     Class<?> cls = obj.getClass();
     LOG.info("visit Single Object cls {}, obj {}", cls, obj);
-    if (cls.isArray()) {
+    LOG.info("is collection ? {}", Collection.class.isAssignableFrom(cls));
+    LOG.info("visit single object cls name {}, cls.isarray {}", cls.getName(), cls.isArray());
+    if (Collection.class.isAssignableFrom(cls)) {
       visitArray(obj, cls, state);
     } else if (cls.getName().startsWith("java.lang.reflect")) {
       // do nothing.
@@ -161,9 +177,15 @@ public final class SizeEstimator {
       LOG.info("viso getclass info cls  {}", cls);
       ClassInfo classInfo = getClassInfo(cls);
       state.setSize(state.getSize() + classInfo.shellSize);
+      LOG.info("after state setsize, state size {}", state.getSize());
       for (Field field : classInfo.pointerFields) {
+        LOG.info("for loop field {}", field);
         try {
-          state.enque(field.get(obj));
+          state.enqueue(field.get(obj));
+          LOG.info("visit single object, state size {}", state.getSize());
+          LOG.info("visit single object, state stack size {}", state.stack.size());
+          LOG.info("visit single object, field get obj {}", field.get(obj));
+
         } catch (IllegalArgumentException e) {
           throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
@@ -187,7 +209,7 @@ public final class SizeEstimator {
     }
 
 
-    void enque(final Object obj) {
+    void enqueue(final Object obj) {
       if (obj != null && !visited.containsKey(obj)) {
         visited.put(obj, null);
         stack.add(obj);
@@ -206,7 +228,7 @@ public final class SizeEstimator {
       return stack.isEmpty();
     }
 
-    Object deque() {
+    Object dequeue() {
       return stack.pop();
     }
   } // SearchState
@@ -261,6 +283,7 @@ public final class SizeEstimator {
     // Check whether we've already cached a ClassInfo for this class
     ClassInfo info = classInfos.get(cls);
     if (info != null) {
+      LOG.info("using cached info {}", info);
       return info;
     }
     Class<?> superClass = cls.getSuperclass();
@@ -279,11 +302,12 @@ public final class SizeEstimator {
           sizeCount.put(getPrimitiveSize(fieldClass),
             sizeCount.get(getPrimitiveSize((fieldClass))));
         } else { // handle non-primitive references
+          LOG.info("getclassIfno, non primitive field {} ", field);
 //          try {
             field.setAccessible(true); // Enable future get()'s on this field
             // add the field size to shellsize, add the field itself to pointerFields
             shellSize += pointerSize;
-            LOG.info("pointer fields added filed {}", field);
+            LOG.info("pointer fields added field {}", field);
             pointerFields.add(field);
 //          } catch (Exception RuntimeException){
 //            LOG.error("Error when trying to determine size of a filed in class {}", cls);
