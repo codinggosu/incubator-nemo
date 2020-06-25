@@ -21,10 +21,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //import java.util.ArrayList;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+//import java.util.stream.Collectors;
+//import java.util.stream.Stream;
 
 
 /**
@@ -49,19 +51,20 @@ public final class SizeEstimator {
   private static final int ALIGN_SIZE = 8;
   private static boolean is64Bit = true;
   private static int objectSize = 16; // 12 bytes with 8 byte offset
+  private static int pointerSize = 8;
 
 
   // cache of classInfos
-  private WeakHashMap<Class<?>, ClassInfo> classInfos = new WeakHashMap<Class<?>, ClassInfo>();
+  private static WeakHashMap<Class<?>, ClassInfo> classInfos = new WeakHashMap<Class<?>, ClassInfo>();
 
 
   // return a map keeping status of the count of fields of certain sizes
-  private HashMap<Integer, Integer> getNewFieldSizesMap() {
+  private static HashMap<Integer, Integer> getNewFieldSizesMap() {
     HashMap<Integer, Integer> fieldSizes = new HashMap<>();
-    fieldSizes.put(1,0);
-    fieldSizes.put(2,0);
-    fieldSizes.put(4,0);
-    fieldSizes.put(8,0);
+    fieldSizes.put(1, 0);
+    fieldSizes.put(2, 0);
+    fieldSizes.put(4, 0);
+    fieldSizes.put(8, 0);
     return fieldSizes;
 //    return Stream.of(new Object[][] {
 //      {  1, 0 },
@@ -73,9 +76,10 @@ public final class SizeEstimator {
 
   public static void initialize() {
     String architecture = System.getProperty("os.arch");
-    is64Bit = (architecture.contains("64") || architecture.contains("s390x")) ? true : false;
+    is64Bit = architecture.contains("64") || architecture.contains("s390x");
 //    LOG.info("the system architecture is {}", architecture);
     objectSize = is64Bit ? 16 : 8;
+    pointerSize = is64Bit ? 8 : 4;
   }
 
   public static long estimate(final Object obj) {
@@ -86,22 +90,91 @@ public final class SizeEstimator {
     SearchState state = new SearchState(map);
     state.enque(obj);
     while (!state.isFinished()) {
-      break;
+      visitSingleObject(state.deque(), state);
     }
-    return 0;
+    return state.size;
+  }
+  // Estimate the size of arrays larger than ARRAY_SIZE_FOR_SAMPLING by sampling.
+  private static final int ARRAY_SIZE_FOR_SAMPLING = 400;
+  private static final int ARRAY_SAMPLE_SIZE = 100; // should be lower than ARRAY_SIZE_FOR_SAMPLING
+
+  private static void visitArray(final Object array, final Class cls, final SearchState state) {
+    LOG.info("visit Array called obj {}, cls {}, state {}, state.size {}");
+    long length = Array.getLength(array);
+    Class elementClass = cls.getComponentType();
+
+    // Arrays have object header and length field which is an integer
+    long arrSize = alignSize(objectSize + INT_SIZE);
+    if (elementClass.isPrimitive()) {
+      arrSize += alignSize(length * getPrimitiveSize(elementClass));
+      state.size += arrSize;
+    } else {
+      arrSize += alignSize(length * pointerSize);
+      state.size += arrSize;
+      if (length <= ARRAY_SIZE_FOR_SAMPLING) {
+        var arrayIndex = 0;
+        while (arrayIndex < length) {
+          state.enque(Array.get(array, arrayIndex));
+          arrayIndex += 1;
+        }
+      } else {
+        // Estimate the size of a large array by sampling elements without replacement.
+        // To exclude the shared objects that the array elements may link, sample twice
+        // and use the min one to calculate array size.
+        double sampledSize = 0.0;
+        Random rand = new Random(42);
+        Set<Integer> chosen = new HashSet<Integer>(ARRAY_SAMPLE_SIZE);
+        int index = 0;
+        for (int i = 0; i < ARRAY_SAMPLE_SIZE; i++) {
+          index = rand.nextInt((int) length);
+          while (chosen.contains(index)) {
+            index = rand.nextInt((int) length);
+          }
+          chosen.add(index);
+          Object element = Array.get(array, index); // randomly sampled element
+          sampledSize += SizeEstimator.estimate(element, state.visited);
+        }
+        state.size += Double.valueOf(((length / (ARRAY_SAMPLE_SIZE * 1.0)) * sampledSize)).longValue();
+      }
+    }
   }
 
-  private void visitSingleObject(final Object obj, final SearchState state) {
 
 
-  }
 
-  private long alignSize(final long size, final int alignment) {
-    return (size + alignment - 1) & ~(alignment - 1);
+
+  private static void visitSingleObject(final Object obj, final SearchState state) {
+    LOG.info("VISIT SINGLE OBJECT CALLED");
+    Class<?> cls = obj.getClass();
+    LOG.info("visit Single Object cls {}, obj {}", cls, obj);
+    if (cls.isArray()) {
+      visitArray(obj, cls, state);
+    } else if (cls.getName().startsWith("java.lang.reflect")) {
+      // do nothing.
+      /// empty statement;
+      int empty = 1;
+    } else if (obj instanceof ClassLoader || obj instanceof  Class) {
+      // do nothing.
+      /// empty statement;
+      int empty = 1;
+    } else {
+      LOG.info("viso getclass info cls  {}", cls);
+      ClassInfo classInfo = getClassInfo(cls);
+      state.setSize(state.getSize() + classInfo.shellSize);
+      for (Field field : classInfo.pointerFields) {
+        try {
+          state.enque(field.get(obj));
+        } catch (IllegalArgumentException e) {
+          throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+          throw new RuntimeException(e);
+        }
+      }
+    }
   }
 
   /**
-   * A class.
+   * A class to represent what state the search is currently in.
    */
   private static class SearchState {
     private IdentityHashMap visited;
@@ -121,6 +194,14 @@ public final class SizeEstimator {
       }
     }
 
+    void setSize(final long size) {
+      this.size = size;
+    }
+
+    long getSize() {
+      return this.size;
+    }
+
     boolean isFinished() {
       return stack.isEmpty();
     }
@@ -128,24 +209,24 @@ public final class SizeEstimator {
     Object deque() {
       return stack.pop();
     }
-  }
+  } // SearchState
 
-  private long getPrimitiveSize(Class cls) {
-    if (cls == Byte.class) {
+  private static long getPrimitiveSize(final Class cls) {
+    if (cls == byte.class) {
       return BYTE_SIZE;
-    } else if (cls == Boolean.class) {
+    } else if (cls == boolean.class) {
       return BOOLEAN_SIZE;
-    } else if (cls == Character.class) {
+    } else if (cls == char.class) {
       return CHAR_SIZE;
-    } else if (cls == Short.class) {
+    } else if (cls == short.class) {
       return SHORT_SIZE;
-    } else if (cls == Integer.class) {
+    } else if (cls == int.class) {
       return INT_SIZE;
-    } else if (cls == Long.class) {
+    } else if (cls == long.class) {
       return LONG_SIZE;
-    } else if (cls == Float.class) {
+    } else if (cls == float.class) {
       return FLOAT_SIZE;
-    } else if (cls == Double.class) {
+    } else if (cls == double.class) {
       return DOUBLE_SIZE;
     } else {
       throw new IllegalArgumentException(
@@ -156,22 +237,35 @@ public final class SizeEstimator {
   /**
    * A class for ClassInfo, which contains the class overhead size and references the class has.
    */
-  private class ClassInfo {
+  private static class ClassInfo {
+    ClassInfo(final long shellSize, final List pointerFields) {
+      this.shellSize = shellSize;
+      this.pointerFields = pointerFields;
+    }
     private long shellSize;
     private List<Field> pointerFields;
   }
 
   /**
    * Get or compute the ClassInfo for a given class.
+   * @return the computed classInfo
    */
-  private ClassInfo getClassInfo(Class<?> cls) {
+  private static ClassInfo getClassInfo(final Class<?> cls) {
+    // base case
+    if (cls == Object.class) {
+      ClassInfo info = new ClassInfo(8L, new ArrayList<Field>());
+      classInfos.put(cls, info);
+      return info;
+    }
+    LOG.info("get class info method input {}", cls);
     // Check whether we've already cached a ClassInfo for this class
     ClassInfo info = classInfos.get(cls);
     if (info != null) {
       return info;
     }
-
-    ClassInfo parent = getClassInfo(cls.getSuperclass());
+    Class<?> superClass = cls.getSuperclass();
+    ClassInfo parent = getClassInfo(superClass);
+    LOG.info("get class info method superclass {}", parent);
     long shellSize = parent.shellSize;
     List pointerFields = parent.pointerFields;
     HashMap sizeCount = getNewFieldSizesMap();
@@ -180,54 +274,31 @@ public final class SizeEstimator {
     for (Field field : cls.getDeclaredFields()) {
       if (java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
         Class fieldClass = field.getType();
+        // handle primitive members
         if (fieldClass.isPrimitive()) {
           sizeCount.put(getPrimitiveSize(fieldClass),
             sizeCount.get(getPrimitiveSize((fieldClass))));
-        } else {
-          try {
+        } else { // handle non-primitive references
+//          try {
             field.setAccessible(true); // Enable future get()'s on this field
-            pointerFields.addAll(field.pointerFields);
-          } catch (Exception RuntimeException){
-            LOG.error("Error when trying to determine size of a filed in class {}", cls);
-          }
-          sizeCount(pointerSize) += 1;
+            // add the field size to shellsize, add the field itself to pointerFields
+            shellSize += pointerSize;
+            LOG.info("pointer fields added filed {}", field);
+            pointerFields.add(field);
+//          } catch (Exception RuntimeException){
+//            LOG.error("Error when trying to determine size of a filed in class {}", cls);
+//          }
         }
       }
     }
+    // cache the newly computed ClassInfo
+    ClassInfo newInfo = new ClassInfo(shellSize, pointerFields);
+    classInfos.put(cls, newInfo);
+    return newInfo;
+  } // getClassInfo
 
-    // Based on the simulated field layout code in Aleksey Shipilev's report:
-    // http://cr.openjdk.java.net/~shade/papers/2013-shipilev-fieldlayout-latest.pdf
-    // The code is in Figure 9.
-    // The simplified idea of field layout consists of 4 parts (see more details in the report):
-    //
-    // 1. field alignment: HotSpot lays out the fields aligned by their size.
-    // 2. object alignment: HotSpot rounds instance size up to 8 bytes
-    // 3. consistent fields layouts throughout the hierarchy: This means we should layout
-    // superclass first. And we can use superclass's shellSize as a starting point to layout the
-    // other fields in this class.
-    // 4. class alignment: HotSpot rounds field blocks up to HeapOopSize not 4 bytes, confirmed
-    // with Aleksey. see https://bugs.openjdk.java.net/browse/CODETOOLS-7901322
-    //
-    // The real world field layout is much more complicated. There are three kinds of fields
-    // order in Java 8. And we don't consider the @contended annotation introduced by Java 8.
-    // see the HotSpot classloader code, layout_fields method for more details.
-    // hg.openjdk.java.net/jdk8/jdk8/hotspot/file/tip/src/share/vm/classfile/classFileParser.cpp
-    var alignedSize = shellSize
-    for (size <- fieldSizes if sizeCount(size) > 0) {
-      val count = sizeCount(size).toLong
-      // If there are internal gaps, smaller field can fit in.
-      alignedSize = math.max(alignedSize, alignSizeUp(shellSize, size) + size * count)
-      shellSize += size * count
-    }
-
-    // Should choose a larger size to be new shellSize and clearly alignedSize >= shellSize, and
-    // round up the instance filed blocks
-    shellSize = alignSizeUp(alignedSize, pointerSize)
-
-    // Create and cache a new ClassInfo
-    val newInfo = new ClassInfo(shellSize, pointerFields)
-    classInfos.put(cls, newInfo)
-    newInfo
+  private static long alignSize(final long size) {
+    return (size + ALIGN_SIZE - 1) & ~(ALIGN_SIZE - 1);
   }
 
 }
