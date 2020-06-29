@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.*;
-
 //import java.util.stream.Collectors;
 //import java.util.stream.Stream;
 
@@ -133,11 +132,9 @@ public final class SizeEstimator {
 //      LOG.info("state size before set size {}", state.getSize());
 //      state.setSize(state.getSize() + arrSize);
 //      LOG.info("state size after set size {}", state.getSize());
-
 //      LOG.info("state size before += size {}", state.size);
       state.size += arrSize;
 //      LOG.info("state size after += size {}", state.size);
-
     } else {
 //      LOG.info("not primitive array, array is {}", array);
       arrSize += alignSize(length * pointerSize);
@@ -185,15 +182,8 @@ public final class SizeEstimator {
 //    if (Collection.class.isAssignableFrom(cls) || cls.isArray()) {
     if (cls.isArray()) {
       visitArray(obj, cls, state);
-    } else if (cls.getName().startsWith("java.lang.reflect")) {
-      // do nothing.
-      /// empty statement;
-      int empty = 1;
-    } else if (obj instanceof ClassLoader || obj instanceof  Class) {
-      /// do nothing.
-      /// empty statement;
-      int empty = 1;
-    } else {
+    } else if (!cls.getName().startsWith("java.lang.reflect")
+      || !(obj instanceof ClassLoader || obj instanceof  Class)) {
 //      LOG.info("viso getclass info cls  {}", cls);
       ClassInfo classInfo = getClassInfo(cls);
       state.setSize(state.getSize() + classInfo.shellSize);
@@ -208,13 +198,12 @@ public final class SizeEstimator {
 //          LOG.info("visit single object, state size {}", state.getSize());
 //          LOG.info("visit single object, state stack size {}", state.stack.size());
 //          LOG.info("visit single object, field get obj {}", field.get(obj));
-
         } catch (IllegalArgumentException e) {
           // pass fields that can't be accessed with field.get(obj)
-//          throw new RuntimeException(e);
           continue;
         } catch (IllegalAccessException e) {
-          throw new RuntimeException(e);
+          // pass fields that can't be accessed with field.get(obj)
+          continue;
         }
       }
     }
