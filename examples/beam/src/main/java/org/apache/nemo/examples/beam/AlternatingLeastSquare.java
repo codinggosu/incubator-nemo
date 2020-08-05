@@ -282,6 +282,7 @@ public final class AlternatingLeastSquare {
     UpdateUserAndItemMatrix(final Integer numFeatures, final double lambda,
                             final PCollection<KV<Integer, KV<int[], float[]>>> parsedUserData,
                             final PCollection<KV<Integer, KV<int[], float[]>>> parsedItemData) {
+      System.out.println("UpdateUserAndItemMatrix contructor");
       this.numFeatures = numFeatures;
       this.lambda = lambda;
       this.parsedUserData = parsedUserData;
@@ -290,6 +291,8 @@ public final class AlternatingLeastSquare {
 
     @Override
     public PCollection<KV<Integer, float[]>> expand(final PCollection<KV<Integer, float[]>> itemMatrix) {
+      System.out.println("UpdateUserAndItemMatrix expand");
+
       // Make Item Matrix view.
       final PCollectionView<Map<Integer, float[]>> itemMatrixView =
         itemMatrix.apply(GroupByKey.create()).apply(ParDo.of(new UngroupSingleVectorList())).apply(View.asMap());
@@ -405,6 +408,7 @@ public final class AlternatingLeastSquare {
     // Iterations to update Item Matrix.
     for (int i = 0; i < numItr; i++) {
       // NOTE: a single composite transform for the iteration.
+      System.out.println("iterating over UpdateUserandItemMatrix");
       itemMatrix = itemMatrix.apply(new UpdateUserAndItemMatrix(numFeatures, lambda, parsedUserData, parsedItemData));
     }
 

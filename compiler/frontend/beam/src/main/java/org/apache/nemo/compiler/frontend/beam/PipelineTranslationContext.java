@@ -38,6 +38,8 @@ import org.apache.nemo.compiler.frontend.beam.coder.BeamDecoderFactory;
 import org.apache.nemo.compiler.frontend.beam.coder.BeamEncoderFactory;
 import org.apache.nemo.compiler.frontend.beam.coder.SideInputCoder;
 import org.apache.nemo.compiler.frontend.beam.transform.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +50,8 @@ import java.util.Stack;
  */
 
 final class PipelineTranslationContext {
+  private static final Logger LOG = LoggerFactory.getLogger(PipelineTranslationContext.class);
+
   private final PipelineOptions pipelineOptions;
   private final DAGBuilder<IRVertex, IREdge> builder;
   private final Map<PValue, TransformHierarchy.Node> pValueToProducerBeamNode;
@@ -75,6 +79,7 @@ final class PipelineTranslationContext {
    * @param compositeTransform composite transform.
    */
   void enterCompositeTransform(final TransformHierarchy.Node compositeTransform) {
+    LOG.info("PTC, enterCompositeTransform {} ", compositeTransform);
     if (compositeTransform.getTransform() instanceof LoopCompositeTransform) {
       final LoopVertex loopVertex = new LoopVertex(compositeTransform.getFullName());
       builder.addVertex(loopVertex, loopVertexStack);
@@ -87,6 +92,7 @@ final class PipelineTranslationContext {
    * @param compositeTransform composite transform.
    */
   void leaveCompositeTransform(final TransformHierarchy.Node compositeTransform) {
+    LOG.info("PTC, leaveCompositeTransform {} ", compositeTransform);
     if (compositeTransform.getTransform() instanceof LoopCompositeTransform) {
       loopVertexStack.pop();
     }
@@ -98,6 +104,7 @@ final class PipelineTranslationContext {
    * @param vertex IR vertex to add
    */
   void addVertex(final IRVertex vertex) {
+    LOG.info("PTC, addVertex, vertex {} ", vertex);
     builder.addVertex(vertex, loopVertexStack);
   }
 
@@ -113,6 +120,7 @@ final class PipelineTranslationContext {
    * @param sideInputs of the vertex.
    */
   void addSideInputEdges(final IRVertex dstVertex, final Map<Integer, PCollectionView<?>> sideInputs) {
+    LOG.info("dongjoo PTC, addSideInputEdges dstver {}, sideinputs {}", dstVertex, sideInputs);
     for (final Map.Entry<Integer, PCollectionView<?>> entry : sideInputs.entrySet()) {
       final int index = entry.getKey();
       final PCollectionView view = entry.getValue();
@@ -151,6 +159,7 @@ final class PipelineTranslationContext {
    * @param input the {@link PValue} {@code dst} consumes
    */
   void addEdgeTo(final IRVertex dst, final PValue input) {
+    LOG.info("PTC, addEdgeto being called, dst {}, input {}", dst, input);
     if (input instanceof PCollection) {
       final Coder elementCoder = ((PCollection) input).getCoder();
       final Coder windowCoder = ((PCollection) input).getWindowingStrategy().getWindowFn().windowCoder();
@@ -178,6 +187,8 @@ final class PipelineTranslationContext {
    * @param windowCoder  window coder.
    */
   void addEdge(final IREdge edge, final Coder elementCoder, final Coder windowCoder) {
+    LOG.info("PTC, addEdge being called, edge {}, elementCoder {} windowCoder {}", edge, elementCoder, windowCoder);
+
     edge.setProperty(KeyExtractorProperty.of(new BeamKeyExtractor()));
     if (elementCoder instanceof KvCoder) {
       Coder keyCoder = ((KvCoder) elementCoder).getKeyCoder();

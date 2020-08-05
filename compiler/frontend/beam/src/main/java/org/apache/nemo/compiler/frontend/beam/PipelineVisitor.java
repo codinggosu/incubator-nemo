@@ -21,6 +21,8 @@ package org.apache.nemo.compiler.frontend.beam;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.runners.TransformHierarchy;
 import org.apache.nemo.common.ir.IRDAG;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Uses the translator and the context to build a Nemo IR DAG.
@@ -28,6 +30,7 @@ import org.apache.nemo.common.ir.IRDAG;
  * - Context: The translator builds a DAG in the context.
  */
 public final class PipelineVisitor extends Pipeline.PipelineVisitor.Defaults {
+  private static final Logger LOG = LoggerFactory.getLogger(PipelineVisitor.class);
   private static PipelineTranslator pipelineTranslator = PipelineTranslator.INSTANCE;
   private final PipelineTranslationContext context;
 
@@ -36,18 +39,22 @@ public final class PipelineVisitor extends Pipeline.PipelineVisitor.Defaults {
    * @param pipelineOptions pipeline options.
    */
   public PipelineVisitor(final Pipeline pipeline, final NemoPipelineOptions pipelineOptions) {
+    LOG.info("PipelineVisitor constructor pipeline {}, pipelineOptions {}", pipeline, pipelineOptions);
     this.context = new PipelineTranslationContext(pipeline, pipelineOptions);
   }
 
   @Override
   public void visitPrimitiveTransform(final TransformHierarchy.Node node) {
+    LOG.info("PipelineVisitor visitPrimitiveTransform node {}", node);
+
     pipelineTranslator.translatePrimitive(context, node);
   }
 
   @Override
   public CompositeBehavior enterCompositeTransform(final TransformHierarchy.Node node) {
     final CompositeBehavior compositeBehavior = pipelineTranslator.translateComposite(context, node);
-
+    LOG.info("PipleLineVisitor enterCompositeTransform input node {}, compositebehavior {}, context {}",
+      node, compositeBehavior, context);
     // this should come after the above translateComposite, since this composite is a child of a previous composite.
     context.enterCompositeTransform(node);
     return compositeBehavior;
@@ -55,6 +62,7 @@ public final class PipelineVisitor extends Pipeline.PipelineVisitor.Defaults {
 
   @Override
   public void leaveCompositeTransform(final TransformHierarchy.Node node) {
+    LOG.info("PipeLineVisiter, leaveCompositeTransform node {}", node);
     context.leaveCompositeTransform(node);
   }
 
