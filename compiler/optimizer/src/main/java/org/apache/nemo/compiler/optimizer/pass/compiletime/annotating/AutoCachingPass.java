@@ -59,17 +59,41 @@ public final class AutoCachingPass extends AnnotatingPass {
 
     @Override
     public IRDAG apply(final IRDAG dag) {
+      LOG.info("dongjoo, autocaching passed entered");
       // a map to store which edge is the result of which vertex + the input to that vertex
       // used to track whether an edge is reused, and whether and edge is the same as another edge
-      HashMap<IREdge, Pair<IRVertex, List<IREdge>>> edgeSources = new HashMap<>();
+      // key is the IRVertex that an edge is the output of, value.left is the output, value.right is the input
+      // to the vertex
+      HashMap<IRVertex, Pair<IREdge, List<IREdge>>> edgeSources = new HashMap<>();
 
       // populate { edgeSources } first by iterating through vertices and putting the output to edgeSources map
-      
-      dag.getVertices().forEach(vertex ->
-        dag.getIncomingEdgesOf(vertex).stream()
-          .filter(edge -> !edge.getPropertyValue(DataStoreProperty.class).isPresent())
-          .forEach(edge -> edge.setProperty(
-            DataStoreProperty.of(DataStoreProperty.Value.LOCAL_FILE_STORE))));
+      for (IRVertex vertex: dag.getVertices()) {
+        for (IREdge outputEdge : dag.getOutgoingEdgesOf(vertex)) {
+          if (!edgeSources.containsKey(outputEdge.getSrc())
+              || !edgeSources.get(outputEdge.getSrc()).right().equals(dag.getIncomingEdgesOf(vertex))) {
+          // need to come up with better way to compare the inputs to vertex?
+            LOG.info("caching edge!! vertexid {}, edgeid {}", vertex.getId(), outputEdge.getId());
+            LOG.info("print current vertex incoming edges");
+            dag.getIncomingEdgesOf(vertex).stream().forEach(edge -> LOG.info("=> {}", edge.getId()));
+            LOG.info("print cached vertex incoming edges");
+            if (edgeSources.containsKey(outputEdge)) {
+              edgeSources.get(outputEdge).right().stream().forEach(edge -> LOG.info("=> {}", edge.getId()));
+            } else {
+              LOG.info("output edge not inside cache");
+            }
+            edgeSources.put(outputEdge.getSrc(), Pair.of(outputEdge, dag.getIncomingEdgesOf(vertex)));
+          } else {
+            LOG.info("cached edge!! vertexid {}, edgeid {}, replaceable with {}",
+              vertex.getId(), outputEdge.getId(), edgeSources.get(vertex).left().getId());
+          }
+        }
+      }
+      // then check if any edges should be cached (reused and is the output of the same transform with same input)
+//      dag.getVertices().forEach(vertex ->
+//        dag.getIncomingEdgesOf(vertex).stream()
+//          .filter(edge -> !edge.getPropertyValue(DataStoreProperty.class).isPresent())
+//          .forEach(edge -> edge.setProperty(
+//            DataStoreProperty.of(DataStoreProperty.Value.LOCAL_FILE_STORE))));
 
       // previous implementation of autocaching (wrong implementation, failed)
         // HashMap<IRVertex, Integer> locations = new HashMap<IRVertex, Integer>();
