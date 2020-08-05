@@ -37,6 +37,7 @@ import java.util.regex.Matcher;
 
 import org.apache.nemo.common.ir.vertex.IRVertex;
 import org.apache.nemo.common.ir.vertex.OperatorVertex;
+import org.apache.nemo.common.Pair;
 
 /**
  * Pass for initiating IREdge data persistence ExecutionProperty with default
@@ -58,66 +59,78 @@ public final class AutoCachingPass extends AnnotatingPass {
 
     @Override
     public IRDAG apply(final IRDAG dag) {
+      // a map to store which edge is the result of which vertex + the input to that vertex
+      // used to track whether an edge is reused, and whether and edge is the same as another edge
+      HashMap<IREdge, Pair<IRVertex, List<IREdge>>> edgeSources = new HashMap<>();
+
+      // populate { edgeSources } first by iterating through vertices and putting the output to edgeSources map
+      
+      dag.getVertices().forEach(vertex ->
+        dag.getIncomingEdgesOf(vertex).stream()
+          .filter(edge -> !edge.getPropertyValue(DataStoreProperty.class).isPresent())
+          .forEach(edge -> edge.setProperty(
+            DataStoreProperty.of(DataStoreProperty.Value.LOCAL_FILE_STORE))));
+
+      // previous implementation of autocaching (wrong implementation, failed)
         // HashMap<IRVertex, Integer> locations = new HashMap<IRVertex, Integer>();
-        LOG.info("working !!!!!!!!!!!!!!!!!");
         // make hashmap of transformations and their vertex ids
-        final List<IRVertex> allVertices = dag.getVertices();
-        HashMap<String, ArrayList<IRVertex>> transformOrder = new HashMap<String, ArrayList<IRVertex>>();
-        for (final IRVertex vertex : allVertices) {
-            String passname = "";
-            try {
-                OperatorVertex opvertex = (OperatorVertex) vertex;
-                passname = getPassName(opvertex);
-                if (transformOrder.containsKey(passname)) {
-                    transformOrder.get(passname).add(opvertex);
-                } else {
-                    ArrayList<IRVertex> value = new ArrayList<IRVertex>();
-                    value.add(opvertex);
-                    transformOrder.put(passname, value);
-                }
-            } catch (Exception e) {
-                continue;
-            }
-        }
-        //iterate over each transformation and make subdag to compare
-        for (String passName : transformOrder.keySet()) {
-            ArrayList<IRVertex> vertices = transformOrder.get(passName);
-            // ArrayList<IRVertex> beginEnd = new ArrayList<IRVertex>(2);
-            IRVertex[] beginEnd = new IRVertex[2];
-            // ArrayList<ArrayList<IRVertex>> subDags = new ArrayList<ArrayList<IRVertex>>();
-            for (int i = 0; i < vertices.size(); i++) {
-                for (int j = i + 1; j < vertices.size(); j++) {
-                    beginEnd[0] = vertices.get(i);
-                    beginEnd[1] = vertices.get(j);
-                    // beginEnd.set(0, vertices.get(i));
-                    // beginEnd.set(1, vertices.get(j));
-                    // subDags.add(beginEnd);
-                    LOG.info("begin {} end {} ", beginEnd[0].getNumericId(), beginEnd[1].getNumericId());
-                    List<ArrayList<IRVertex>> test = getAllPathsBetween(dag, beginEnd[0], beginEnd[1]);
-                    LOG.info("PASS NAME {} ", passName);
-                    LOG.info("begin  {} end {} ", beginEnd[0], beginEnd[1]);
-                    LOG.info("all paths length {} ", test.size());
-                    for (ArrayList<IRVertex> member : test) {
-                        LOG.info("first element {}, last element {}",  member.get(0), member.get(member.size() - 1));
-                        // for (IRVertex elem : member) {
-                        //     LOG.info("PATH FROM {} to {}", beginEnd.get(0).toString(), beginEnd.get(1).toString());
-                        //     LOG.info("element {}, num id {}", elem.toString(), elem.getNumericId());
-                        // }
-                    }
-                    // LOG.info("BeginEnd for transformation {}, {}", passName, beginEnd);
-                }
-            }
-            // for (int i = 0; i < subDags.size(); i++) {
-            //     for (int j = i + 1; j < subDags.size(); j++) {
-            //         IREdge marked = markEqualOperationSubdag(dag, subDags.get(i), subDags.get(j));
-            //         if (marked != null) {
-            //             // marked.getPropertyValue(CachingProperty.class);
-            //             // marked.set
-            //             LOG.info("the ID OF MARKED IS  !!!!! {}", marked.getNumericId());
-            //         }
-            //     }
-            // }
-        }
+//        final List<IRVertex> allVertices = dag.getVertices();
+//        HashMap<String, ArrayList<IRVertex>> transformOrder = new HashMap<String, ArrayList<IRVertex>>();
+//        for (final IRVertex vertex : allVertices) {
+//            String passname = "";
+//            try {
+//                OperatorVertex opvertex = (OperatorVertex) vertex;
+//                passname = getPassName(opvertex);
+//                if (transformOrder.containsKey(passname)) {
+//                    transformOrder.get(passname).add(opvertex);
+//                } else {
+//                    ArrayList<IRVertex> value = new ArrayList<IRVertex>();
+//                    value.add(opvertex);
+//                    transformOrder.put(passname, value);
+//                }
+//            } catch (Exception e) {
+//                continue;
+//            }
+//        }
+//        //iterate over each transformation and make subdag to compare
+//        for (String passName : transformOrder.keySet()) {
+//            ArrayList<IRVertex> vertices = transformOrder.get(passName);
+//            // ArrayList<IRVertex> beginEnd = new ArrayList<IRVertex>(2);
+//            IRVertex[] beginEnd = new IRVertex[2];
+//            // ArrayList<ArrayList<IRVertex>> subDags = new ArrayList<ArrayList<IRVertex>>();
+//            for (int i = 0; i < vertices.size(); i++) {
+//                for (int j = i + 1; j < vertices.size(); j++) {
+//                    beginEnd[0] = vertices.get(i);
+//                    beginEnd[1] = vertices.get(j);
+//                    // beginEnd.set(0, vertices.get(i));
+//                    // beginEnd.set(1, vertices.get(j));
+//                    // subDags.add(beginEnd);
+//                    LOG.info("begin {} end {} ", beginEnd[0].getNumericId(), beginEnd[1].getNumericId());
+//                    List<ArrayList<IRVertex>> test = getAllPathsBetween(dag, beginEnd[0], beginEnd[1]);
+//                    LOG.info("PASS NAME {} ", passName);
+//                    LOG.info("begin  {} end {} ", beginEnd[0], beginEnd[1]);
+//                    LOG.info("all paths length {} ", test.size());
+//                    for (ArrayList<IRVertex> member : test) {
+//                        LOG.info("first element {}, last element {}",  member.get(0), member.get(member.size() - 1));
+//                        // for (IRVertex elem : member) {
+//                        //     LOG.info("PATH FROM {} to {}", beginEnd.get(0).toString(), beginEnd.get(1).toString());
+//                        //     LOG.info("element {}, num id {}", elem.toString(), elem.getNumericId());
+//                        // }
+//                    }
+//                    // LOG.info("BeginEnd for transformation {}, {}", passName, beginEnd);
+//                }
+//            }
+//            // for (int i = 0; i < subDags.size(); i++) {
+//            //     for (int j = i + 1; j < subDags.size(); j++) {
+//            //         IREdge marked = markEqualOperationSubdag(dag, subDags.get(i), subDags.get(j));
+//            //         if (marked != null) {
+//            //             // marked.getPropertyValue(CachingProperty.class);
+//            //             // marked.set
+//            //             LOG.info("the ID OF MARKED IS  !!!!! {}", marked.getNumericId());
+//            //         }
+//            //     }
+//            // }
+//        }
         return dag;
     }
     /**
