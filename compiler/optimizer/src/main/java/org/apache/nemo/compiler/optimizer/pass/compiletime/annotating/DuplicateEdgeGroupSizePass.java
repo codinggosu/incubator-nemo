@@ -21,6 +21,8 @@ package org.apache.nemo.compiler.optimizer.pass.compiletime.annotating;
 import org.apache.nemo.common.ir.IRDAG;
 import org.apache.nemo.common.ir.edge.executionproperty.DuplicateEdgeGroupProperty;
 import org.apache.nemo.common.ir.edge.executionproperty.DuplicateEdgeGroupPropertyValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -30,6 +32,8 @@ import java.util.Optional;
  */
 @Annotates(DuplicateEdgeGroupProperty.class)
 public final class DuplicateEdgeGroupSizePass extends AnnotatingPass {
+  private static final Logger LOG = LoggerFactory.getLogger(DuplicateEdgeGroupSizePass.class.getName());
+
 
   /**
    * Default constructor.
@@ -48,6 +52,7 @@ public final class DuplicateEdgeGroupSizePass extends AnnotatingPass {
         if (duplicateEdgeGroupProperty.isPresent()) {
           final String groupId = duplicateEdgeGroupProperty.get().getGroupId();
           final Integer currentCount = groupIdToGroupSize.getOrDefault(groupId, 0);
+          LOG.info("dongjoo first pass currentCount {}, groupId {}, e.getId {}", currentCount, groupId, e.getId());
           groupIdToGroupSize.put(groupId, currentCount + 1);
         }
       }));
@@ -58,6 +63,8 @@ public final class DuplicateEdgeGroupSizePass extends AnnotatingPass {
           e.getPropertyValue(DuplicateEdgeGroupProperty.class);
         if (duplicateEdgeGroupProperty.isPresent()) {
           final String groupId = duplicateEdgeGroupProperty.get().getGroupId();
+          LOG.info("dongjoo second pass groupSize {}, groupId {}, e.getId {}",
+            groupIdToGroupSize.get(groupId), groupId, e.getId());
           if (groupIdToGroupSize.containsKey(groupId)) {
             duplicateEdgeGroupProperty.get().setGroupSize(groupIdToGroupSize.get(groupId));
           }

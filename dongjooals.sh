@@ -26,6 +26,6 @@
     -user_args "`pwd`/examples/resources/inputs/test_input_als 10 3 0.05 `pwd`/outputs/outputs-als"
 
 
-#cp ./REEF_LOCAL_RUNTIME/als-*/dag/plan-logical.json ~/Desktop/begin.json
-#cp ./REEF_LOCAL_RUNTIME/als-*/dag/Plan*-final.json ~/Desktop/final.json
-#
+cp ./REEF_LOCAL_RUNTIME/als-*/dag/plan-logical.json ~/Desktop/begin.json
+cp ./REEF_LOCAL_RUNTIME/als-*/dag/Plan*-final.json ~/Desktop/final.json
+
