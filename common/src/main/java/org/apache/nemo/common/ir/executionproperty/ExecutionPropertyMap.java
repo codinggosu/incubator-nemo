@@ -29,6 +29,8 @@ import org.apache.nemo.common.ir.edge.IREdge;
 import org.apache.nemo.common.ir.edge.executionproperty.*;
 import org.apache.nemo.common.ir.vertex.IRVertex;
 import org.apache.nemo.common.ir.vertex.executionproperty.ResourcePriorityProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.io.Serializable;
@@ -44,6 +46,7 @@ import java.util.stream.Stream;
  */
 @NotThreadSafe
 public final class ExecutionPropertyMap<T extends ExecutionProperty> implements Serializable {
+  private static final Logger LOG = LoggerFactory.getLogger(ExecutionPropertyMap.class.getName());
   private final String id;
   private final Map<Class<? extends ExecutionProperty>, T> properties = new HashMap<>();
   private final Set<Class<? extends ExecutionProperty>> finalizedProperties = new HashSet<>();
@@ -86,6 +89,7 @@ public final class ExecutionPropertyMap<T extends ExecutionProperty> implements 
       case ONE_TO_ONE:
         map.put(DataFlowProperty.of(DataFlowProperty.Value.PUSH));
         map.put(PartitionerProperty.of(PartitionerProperty.Type.INTACT));
+        LOG.info("putting memory store as irEdge.getId() {} for one to one communication", irEdge.getId());
         map.put(DataStoreProperty.of(DataStoreProperty.Value.MEMORY_STORE));
         break;
       default:

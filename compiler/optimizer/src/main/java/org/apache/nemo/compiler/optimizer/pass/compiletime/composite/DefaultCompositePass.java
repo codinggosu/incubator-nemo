@@ -38,7 +38,7 @@ public final class DefaultCompositePass extends CompositePass {
       new DefaultEdgeDecoderPass(),
       new DefaultDataStorePass(),
       new DefaultDataPersistencePass(),
-      new AutoCachingPass(),
+//      new AutoCachingPass(),
       new LoopOptimizationCompositePass(),
       new DefaultScheduleGroupPass(),
       new CompressionPass(),

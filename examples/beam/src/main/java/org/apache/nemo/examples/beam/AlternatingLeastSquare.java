@@ -28,7 +28,7 @@ import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.PCollectionView;
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.nemo.compiler.frontend.beam.transform.LoopCompositeTransform;
+//import org.apache.nemo.compiler.frontend.beam.transform.LoopCompositeTransform;
 import org.netlib.util.intW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -265,7 +265,7 @@ public final class AlternatingLeastSquare {
    * The loop updates the user matrix and the item matrix in each iteration.
    */
   public static final class UpdateUserAndItemMatrix
-    extends LoopCompositeTransform<PCollection<KV<Integer, float[]>>, PCollection<KV<Integer, float[]>>> {
+    extends PTransform<PCollection<KV<Integer, float[]>>, PCollection<KV<Integer, float[]>>> {
     private final Integer numFeatures;
     private final double lambda;
     private final transient PCollection<KV<Integer, KV<int[], float[]>>> parsedUserData;
