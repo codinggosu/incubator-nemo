@@ -89,7 +89,6 @@ public final class ExecutionPropertyMap<T extends ExecutionProperty> implements 
       case ONE_TO_ONE:
         map.put(DataFlowProperty.of(DataFlowProperty.Value.PUSH));
         map.put(PartitionerProperty.of(PartitionerProperty.Type.INTACT));
-        LOG.info("putting memory store as irEdge.getId() {} for one to one communication", irEdge.getId());
         map.put(DataStoreProperty.of(DataStoreProperty.Value.MEMORY_STORE));
         break;
       default:

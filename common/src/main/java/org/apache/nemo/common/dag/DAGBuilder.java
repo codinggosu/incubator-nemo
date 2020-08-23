@@ -59,6 +59,7 @@ public final class DAGBuilder<V extends Vertex, E extends Edge<V>> implements Se
    * Constructor of DAGBuilder: it initializes everything.
    */
   public DAGBuilder() {
+    LOG.info("dongjoo, empty DAGBUILDER constructor");
     this.vertices = new HashSet<>();
     this.incomingEdges = new HashMap<>();
     this.outgoingEdges = new HashMap<>();
@@ -102,6 +103,13 @@ public final class DAGBuilder<V extends Vertex, E extends Edge<V>> implements Se
     addVertex(v);
     this.assignedLoopVertexMap.put(v, assignedLoopVertex);
     this.loopStackDepthMap.put(v, stackDepth);
+    LOG.info("addvertex of DagBuilder, printing assignedLoopVertexMap");
+    assignedLoopVertexMap.entrySet().stream()
+      .forEach(entry -> LOG.info("v {}, assignedloopVertex  {}, map.size() {}",
+        v.getId(), assignedLoopVertex.getName(), assignedLoopVertexMap.size()));
+    assignedLoopVertexMap.entrySet().stream()
+      .forEach(entry -> LOG.info("v {}, assignedloopVertex  {}, map.size() {}",
+        entry.getKey().getId(), entry.getValue().getName(), assignedLoopVertexMap.size()));
     return this;
   }
 

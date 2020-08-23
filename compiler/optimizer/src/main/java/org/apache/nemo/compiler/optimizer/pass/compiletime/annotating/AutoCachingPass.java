@@ -20,7 +20,9 @@ package org.apache.nemo.compiler.optimizer.pass.compiletime.annotating;
 
 import org.apache.nemo.common.ir.IRDAG;
 import org.apache.nemo.common.ir.edge.IREdge;
+//import org.apache.beam.sdk.values.TupleTag;
 // import org.apache.nemo.common.ir.edge.executionproperty.CachingProperty;
+import org.apache.nemo.common.ir.edge.executionproperty.AdditionalOutputTagProperty;
 import org.apache.nemo.common.ir.edge.executionproperty.DataPersistenceProperty;
 import org.apache.nemo.common.ir.edge.executionproperty.DataStoreProperty;
 import org.apache.nemo.compiler.optimizer.pass.compiletime.Requires;
@@ -65,27 +67,38 @@ public final class AutoCachingPass extends AnnotatingPass {
       // key is the IRVertex that an edge is the output of, value.left is the output, value.right is the input
       // to the vertex
       HashMap<IRVertex, Pair<IREdge, List<IREdge>>> edgeSources = new HashMap<>();
+      // the special case of BeamTransforms with multiple outputs are recorded in multiOutputVertices
+      HashMap<IRVertex, HashMap<String, IREdge>> multiOutputVertices = new HashMap<>();
+
 
       // populate { edgeSources } first by iterating through vertices and putting the output to edgeSources map
       for (IRVertex vertex: dag.getVertices()) {
         for (IREdge outputEdge : dag.getOutgoingEdgesOf(vertex)) {
+          if (outputEdge.getPropertyValue(AdditionalOutputTagProperty.class).isPresent()) {
+            String tag = outputEdge.getPropertyValue(AdditionalOutputTagProperty.class).get();
+            multiOutputVertices.getOrDefault(vertex, new HashMap<String, IREdge>()).put(tag, outputEdge);
+//            LOG.info("outputEdge is an additional output {}, tag name: {}",
+//              outputEdge.getId(), outputEdge.getPropertyValue(AdditionalOutputTagProperty.class).get());
+            continue; //forego regular identification scheme for multi output transforms
+          }
           if (!edgeSources.containsKey(outputEdge.getSrc())
               || !edgeSources.get(outputEdge.getSrc()).right().equals(dag.getIncomingEdgesOf(vertex))) {
           // need to come up with better way to compare the inputs to vertex?
-            LOG.info("caching edge!! vertexid {}, edgeid {}", vertex.getId(), outputEdge.getId());
-            LOG.info("print current vertex incoming edges");
-            dag.getIncomingEdgesOf(vertex).stream().forEach(edge -> LOG.info("=> {}", edge.getId()));
-            LOG.info("print cached vertex incoming edges");
-            if (edgeSources.containsKey(outputEdge)) {
-              edgeSources.get(outputEdge).right().stream().forEach(edge -> LOG.info("=> {}", edge.getId()));
-            } else {
-              LOG.info("output edge not inside cache");
-            }
+//            LOG.info("caching edge!! vertexid {}, edgeid {}", vertex.getId(), outputEdge.getId());
+//            LOG.info("print current vertex incoming edges");
+//            dag.getIncomingEdgesOf(vertex).stream().forEach(edge -> LOG.info("=> {}", edge.getId()));
+//            LOG.info("print cached vertex incoming edges");
+//            if (edgeSources.containsKey(outputEdge)) {
+//              edgeSources.get(outputEdge).right().stream().forEach(edge -> LOG.info("=> {}", edge.getId()));
+//            } else {
+//              LOG.info("output edge not inside cache");
+//            }
             edgeSources.put(outputEdge.getSrc(), Pair.of(outputEdge, dag.getIncomingEdgesOf(vertex)));
-          } else {
-            LOG.info("cached edge!! vertexid {}, edgeid {}, replaceable with {}",
-              vertex.getId(), outputEdge.getId(), edgeSources.get(vertex).left().getId());
           }
+//          else {
+//            LOG.info("cached edge!! vertexid {}, edgeid {}, replaceable with {}",
+//              vertex.getId(), outputEdge.getId(), edgeSources.get(vertex).left().getId());
+//          }
         }
       }
       // then check if any edges should be cached (reused and is the output of the same transform with same input)
@@ -95,7 +108,10 @@ public final class AutoCachingPass extends AnnotatingPass {
 //          .forEach(edge -> edge.setProperty(
 //            DataStoreProperty.of(DataStoreProperty.Value.LOCAL_FILE_STORE))));
 
+
       // previous implementation of autocaching (wrong implementation, failed)
+
+
         // HashMap<IRVertex, Integer> locations = new HashMap<IRVertex, Integer>();
         // make hashmap of transformations and their vertex ids
 //        final List<IRVertex> allVertices = dag.getVertices();

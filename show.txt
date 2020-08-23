@@ -1,0 +1,314 @@
+
+Powered by
+    _   __                   
+   / | / /__  ____ ___  ____ 
+  /  |/ / _ \/ __ `__ \/ __ \
+ / /|  /  __/ / / / / / /_/ /
+/_/ |_/\___/_/ /_/ /_/\____/ 
+
+ INFO 08-23 23:48:23,269 JobLauncher:129 [main] - Project Root Path: /home/dongjoo/incubator-nemo
+ INFO 08-23 23:48:23,334 JobLauncher:134 [main] - Launching RPC Server
+ INFO 08-23 23:48:23,563 DriverRPCServer:94 [main] - DriverRPCServer running at 19340
+ INFO 08-23 23:48:23,774 JobLauncher:172 [main] - Launching driver
+
+Powered by
+     ___________  ______  ______  _______
+    /  ______  / /  ___/ /  ___/ /  ____/
+   /     _____/ /  /__  /  /__  /  /___
+  /  /\  \     /  ___/ /  ___/ /  ____/
+ /  /  \  \   /  /__  /  /__  /  /
+/__/    \__\ /_____/ /_____/ /__/
+
+ INFO 08-23 23:48:24,008 JobLauncher:332 [main] - User program started
+ INFO 08-23 23:48:24,009 AlternatingLeastSquare:364 [main] - [/home/dongjoo/incubator-nemo/examples/resources/inputs/test_input_als, 10, 3, 0.05, /home/dongjoo/incubator-nemo/outputs/outputs-als]
+iterating over UpdateUserandItemMatrix
+UpdateUserAndItemMatrix contructor
+UpdateUserAndItemMatrix expand
+iterating over UpdateUserandItemMatrix
+UpdateUserAndItemMatrix contructor
+UpdateUserAndItemMatrix expand
+iterating over UpdateUserandItemMatrix
+UpdateUserAndItemMatrix contructor
+UpdateUserAndItemMatrix expand
+ INFO 08-23 23:48:25,170 DAGBuilder:62 [main] - dongjoo, empty DAGBUILDER constructor
+ INFO 08-23 23:48:25,171 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform RootNode 
+ INFO 08-23 23:48:25,172 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Read} 
+ INFO 08-23 23:48:25,182 FileBasedSource:227 [main] - Filepattern /home/dongjoo/incubator-nemo/examples/resources/inputs/test_input_als matched 1 files with total size 8707
+ INFO 08-23 23:48:25,184 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=ParDo(ParseLine)} 
+ INFO 08-23 23:48:25,184 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=ParDo(ParseLine)/ParMultiDo(ParseLine)}, transform org.apache.nemo.examples.beam.AlternatingLeastSquare$ParseLine@1000d54d
+ INFO 08-23 23:48:25,437 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@ba17be6, sideinputs {}
+ INFO 08-23 23:48:25,438 PipelineTranslator:258 [main] - pvalue tt: ParDo(ParseLine)/ParMultiDo(ParseLine).output [PCollection]
+ INFO 08-23 23:48:25,440 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,445 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=Combine.perKey(TrainingDataCombiner)} 
+ INFO 08-23 23:48:25,446 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=ParDo(ParseLine)2} 
+ INFO 08-23 23:48:25,446 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=ParDo(ParseLine)2/ParMultiDo(ParseLine)}, transform org.apache.nemo.examples.beam.AlternatingLeastSquare$ParseLine@3902bd2c
+ INFO 08-23 23:48:25,455 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@4f4c88f9, sideinputs {}
+ INFO 08-23 23:48:25,456 PipelineTranslator:258 [main] - pvalue tt: ParDo(ParseLine)2/ParMultiDo(ParseLine).output [PCollection]
+ INFO 08-23 23:48:25,456 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,458 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=Combine.perKey(TrainingDataCombiner)2} 
+ INFO 08-23 23:48:25,458 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=ParDo(CreateInitialMatrix)} 
+ INFO 08-23 23:48:25,459 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=ParDo(CreateInitialMatrix)/ParMultiDo(CreateInitialMatrix)}, transform org.apache.nemo.examples.beam.AlternatingLeastSquare$CreateInitialMatrix@40a72ecd
+ INFO 08-23 23:48:25,466 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@625a9c5d, sideinputs {}
+ INFO 08-23 23:48:25,467 PipelineTranslator:258 [main] - pvalue tt: ParDo(CreateInitialMatrix)/ParMultiDo(CreateInitialMatrix).output [PCollection]
+ INFO 08-23 23:48:25,467 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,467 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix} 
+ INFO 08-23 23:48:25,468 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/ParDo(UngroupSingleVectorList)} 
+ INFO 08-23 23:48:25,468 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/ParDo(UngroupSingleVectorList)/ParMultiDo(UngroupSingleVectorList)}, transform org.apache.nemo.examples.beam.AlternatingLeastSquare$UngroupSingleVectorList@40f35e52
+ INFO 08-23 23:48:25,476 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@2f894ad9, sideinputs {}
+ INFO 08-23 23:48:25,476 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix/ParDo(UngroupSingleVectorList)/ParMultiDo(UngroupSingleVectorList).output [PCollection]
+ INFO 08-23 23:48:25,477 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,477 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/View.AsMap} 
+ INFO 08-23 23:48:25,477 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/View.AsMap/View.VoidKeyToMultimapMaterialization} 
+ INFO 08-23 23:48:25,477 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/View.AsMap/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)} 
+ INFO 08-23 23:48:25,477 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/View.AsMap/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)/ParMultiDo(VoidKeyToMultimapMaterialization)}, transform org.apache.beam.sdk.transforms.View$VoidKeyToMultimapMaterialization$VoidKeyToMultimapMaterializationDoFn@36baa049
+ INFO 08-23 23:48:25,484 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@18a25bbd, sideinputs {}
+ INFO 08-23 23:48:25,485 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix/View.AsMap/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)/ParMultiDo(VoidKeyToMultimapMaterialization).output [PCollection]
+ INFO 08-23 23:48:25,485 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,486 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/ParDo(CalculateNextMatrix)} 
+ INFO 08-23 23:48:25,486 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/ParDo(CalculateNextMatrix)/ParMultiDo(CalculateNextMatrix)}, transform org.apache.nemo.examples.beam.AlternatingLeastSquare$CalculateNextMatrix@717d7587
+ INFO 08-23 23:48:25,522 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@2ee83775, sideinputs {0=SimplePCollectionView{tag=Tag<org.apache.beam.sdk.values.PCollectionViews$SimplePCollectionView.<init>:467#20ff67585e33a8f6>}}
+ INFO 08-23 23:48:25,525 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix/ParDo(CalculateNextMatrix)/ParMultiDo(CalculateNextMatrix).output [PCollection]
+ INFO 08-23 23:48:25,525 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,526 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/ParDo(UngroupSingleVectorList)2} 
+ INFO 08-23 23:48:25,526 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/ParDo(UngroupSingleVectorList)2/ParMultiDo(UngroupSingleVectorList)}, transform org.apache.nemo.examples.beam.AlternatingLeastSquare$UngroupSingleVectorList@75156240
+ INFO 08-23 23:48:25,534 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@756aadfc, sideinputs {}
+ INFO 08-23 23:48:25,535 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix/ParDo(UngroupSingleVectorList)2/ParMultiDo(UngroupSingleVectorList).output [PCollection]
+ INFO 08-23 23:48:25,535 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,535 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/View.AsMap2} 
+ INFO 08-23 23:48:25,536 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/View.AsMap2/View.VoidKeyToMultimapMaterialization} 
+ INFO 08-23 23:48:25,536 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/View.AsMap2/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)} 
+ INFO 08-23 23:48:25,536 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/View.AsMap2/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)/ParMultiDo(VoidKeyToMultimapMaterialization)}, transform org.apache.beam.sdk.transforms.View$VoidKeyToMultimapMaterialization$VoidKeyToMultimapMaterializationDoFn@9e54c59
+ INFO 08-23 23:48:25,543 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@3d0cac1f, sideinputs {}
+ INFO 08-23 23:48:25,544 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix/View.AsMap2/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)/ParMultiDo(VoidKeyToMultimapMaterialization).output [PCollection]
+ INFO 08-23 23:48:25,544 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,544 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/ParDo(CalculateNextMatrix)2} 
+ INFO 08-23 23:48:25,544 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix/ParDo(CalculateNextMatrix)2/ParMultiDo(CalculateNextMatrix)}, transform org.apache.nemo.examples.beam.AlternatingLeastSquare$CalculateNextMatrix@56476c16
+ INFO 08-23 23:48:25,553 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@73a8e994, sideinputs {0=SimplePCollectionView{tag=Tag<org.apache.beam.sdk.values.PCollectionViews$SimplePCollectionView.<init>:467#a00997a449310e6c>}}
+ INFO 08-23 23:48:25,554 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix/ParDo(CalculateNextMatrix)2/ParMultiDo(CalculateNextMatrix).output [PCollection]
+ INFO 08-23 23:48:25,554 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,554 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2} 
+ INFO 08-23 23:48:25,555 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/ParDo(UngroupSingleVectorList)} 
+ INFO 08-23 23:48:25,555 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/ParDo(UngroupSingleVectorList)/ParMultiDo(UngroupSingleVectorList)}, transform org.apache.nemo.examples.beam.AlternatingLeastSquare$UngroupSingleVectorList@228bda54
+ INFO 08-23 23:48:25,565 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@4a481728, sideinputs {}
+ INFO 08-23 23:48:25,567 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix2/ParDo(UngroupSingleVectorList)/ParMultiDo(UngroupSingleVectorList).output [PCollection]
+ INFO 08-23 23:48:25,567 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,568 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/View.AsMap} 
+ INFO 08-23 23:48:25,569 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/View.AsMap/View.VoidKeyToMultimapMaterialization} 
+ INFO 08-23 23:48:25,569 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/View.AsMap/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)} 
+ INFO 08-23 23:48:25,569 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/View.AsMap/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)/ParMultiDo(VoidKeyToMultimapMaterialization)}, transform org.apache.beam.sdk.transforms.View$VoidKeyToMultimapMaterialization$VoidKeyToMultimapMaterializationDoFn@479b5066
+ INFO 08-23 23:48:25,576 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@19b206ee, sideinputs {}
+ INFO 08-23 23:48:25,576 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix2/View.AsMap/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)/ParMultiDo(VoidKeyToMultimapMaterialization).output [PCollection]
+ INFO 08-23 23:48:25,576 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,577 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/ParDo(CalculateNextMatrix)} 
+ INFO 08-23 23:48:25,577 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/ParDo(CalculateNextMatrix)/ParMultiDo(CalculateNextMatrix)}, transform org.apache.nemo.examples.beam.AlternatingLeastSquare$CalculateNextMatrix@6690b9fa
+ INFO 08-23 23:48:25,587 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@431e86b1, sideinputs {0=SimplePCollectionView{tag=Tag<org.apache.beam.sdk.values.PCollectionViews$SimplePCollectionView.<init>:467#bbafda9391edc490>}}
+ INFO 08-23 23:48:25,588 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix2/ParDo(CalculateNextMatrix)/ParMultiDo(CalculateNextMatrix).output [PCollection]
+ INFO 08-23 23:48:25,588 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,588 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/ParDo(UngroupSingleVectorList)2} 
+ INFO 08-23 23:48:25,588 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/ParDo(UngroupSingleVectorList)2/ParMultiDo(UngroupSingleVectorList)}, transform org.apache.nemo.examples.beam.AlternatingLeastSquare$UngroupSingleVectorList@3d20e575
+ INFO 08-23 23:48:25,598 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@3a6045c6, sideinputs {}
+ INFO 08-23 23:48:25,598 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix2/ParDo(UngroupSingleVectorList)2/ParMultiDo(UngroupSingleVectorList).output [PCollection]
+ INFO 08-23 23:48:25,598 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,598 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/View.AsMap2} 
+ INFO 08-23 23:48:25,599 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/View.AsMap2/View.VoidKeyToMultimapMaterialization} 
+ INFO 08-23 23:48:25,599 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/View.AsMap2/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)} 
+ INFO 08-23 23:48:25,599 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/View.AsMap2/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)/ParMultiDo(VoidKeyToMultimapMaterialization)}, transform org.apache.beam.sdk.transforms.View$VoidKeyToMultimapMaterialization$VoidKeyToMultimapMaterializationDoFn@6680f714
+ INFO 08-23 23:48:25,605 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@d675f9f, sideinputs {}
+ INFO 08-23 23:48:25,606 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix2/View.AsMap2/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)/ParMultiDo(VoidKeyToMultimapMaterialization).output [PCollection]
+ INFO 08-23 23:48:25,606 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,606 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/ParDo(CalculateNextMatrix)2} 
+ INFO 08-23 23:48:25,606 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix2/ParDo(CalculateNextMatrix)2/ParMultiDo(CalculateNextMatrix)}, transform org.apache.nemo.examples.beam.AlternatingLeastSquare$CalculateNextMatrix@2954f6ab
+ INFO 08-23 23:48:25,615 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@4a92c6a9, sideinputs {0=SimplePCollectionView{tag=Tag<org.apache.beam.sdk.values.PCollectionViews$SimplePCollectionView.<init>:467#154393cf2f9d04a6>}}
+ INFO 08-23 23:48:25,616 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix2/ParDo(CalculateNextMatrix)2/ParMultiDo(CalculateNextMatrix).output [PCollection]
+ INFO 08-23 23:48:25,616 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,616 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3} 
+ INFO 08-23 23:48:25,617 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/ParDo(UngroupSingleVectorList)} 
+ INFO 08-23 23:48:25,617 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/ParDo(UngroupSingleVectorList)/ParMultiDo(UngroupSingleVectorList)}, transform org.apache.nemo.examples.beam.AlternatingLeastSquare$UngroupSingleVectorList@14c93774
+ INFO 08-23 23:48:25,623 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@558b4942, sideinputs {}
+ INFO 08-23 23:48:25,623 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix3/ParDo(UngroupSingleVectorList)/ParMultiDo(UngroupSingleVectorList).output [PCollection]
+ INFO 08-23 23:48:25,624 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,624 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/View.AsMap} 
+ INFO 08-23 23:48:25,624 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/View.AsMap/View.VoidKeyToMultimapMaterialization} 
+ INFO 08-23 23:48:25,624 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/View.AsMap/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)} 
+ INFO 08-23 23:48:25,624 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/View.AsMap/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)/ParMultiDo(VoidKeyToMultimapMaterialization)}, transform org.apache.beam.sdk.transforms.View$VoidKeyToMultimapMaterialization$VoidKeyToMultimapMaterializationDoFn@2262d6d5
+ INFO 08-23 23:48:25,631 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@502a4156, sideinputs {}
+ INFO 08-23 23:48:25,632 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix3/View.AsMap/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)/ParMultiDo(VoidKeyToMultimapMaterialization).output [PCollection]
+ INFO 08-23 23:48:25,633 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,634 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/ParDo(CalculateNextMatrix)} 
+ INFO 08-23 23:48:25,634 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/ParDo(CalculateNextMatrix)/ParMultiDo(CalculateNextMatrix)}, transform org.apache.nemo.examples.beam.AlternatingLeastSquare$CalculateNextMatrix@42f85fa4
+ INFO 08-23 23:48:25,641 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@3af58f76, sideinputs {0=SimplePCollectionView{tag=Tag<org.apache.beam.sdk.values.PCollectionViews$SimplePCollectionView.<init>:467#125f7c3aab6a391>}}
+ INFO 08-23 23:48:25,642 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix3/ParDo(CalculateNextMatrix)/ParMultiDo(CalculateNextMatrix).output [PCollection]
+ INFO 08-23 23:48:25,642 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,643 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/ParDo(UngroupSingleVectorList)2} 
+ INFO 08-23 23:48:25,643 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/ParDo(UngroupSingleVectorList)2/ParMultiDo(UngroupSingleVectorList)}, transform org.apache.nemo.examples.beam.AlternatingLeastSquare$UngroupSingleVectorList@4a44cfc0
+ INFO 08-23 23:48:25,648 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@fa5f81c, sideinputs {}
+ INFO 08-23 23:48:25,649 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix3/ParDo(UngroupSingleVectorList)2/ParMultiDo(UngroupSingleVectorList).output [PCollection]
+ INFO 08-23 23:48:25,649 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,649 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/View.AsMap2} 
+ INFO 08-23 23:48:25,649 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/View.AsMap2/View.VoidKeyToMultimapMaterialization} 
+ INFO 08-23 23:48:25,649 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/View.AsMap2/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)} 
+ INFO 08-23 23:48:25,649 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/View.AsMap2/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)/ParMultiDo(VoidKeyToMultimapMaterialization)}, transform org.apache.beam.sdk.transforms.View$VoidKeyToMultimapMaterialization$VoidKeyToMultimapMaterializationDoFn@6870c3c2
+ INFO 08-23 23:48:25,654 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@233db8e9, sideinputs {}
+ INFO 08-23 23:48:25,655 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix3/View.AsMap2/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)/ParMultiDo(VoidKeyToMultimapMaterialization).output [PCollection]
+ INFO 08-23 23:48:25,655 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,655 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/ParDo(CalculateNextMatrix)2} 
+ INFO 08-23 23:48:25,656 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=AlternatingLeastSquare.UpdateUserAndItemMatrix3/ParDo(CalculateNextMatrix)2/ParMultiDo(CalculateNextMatrix)}, transform org.apache.nemo.examples.beam.AlternatingLeastSquare$CalculateNextMatrix@1c067c0d
+ INFO 08-23 23:48:25,663 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@d4df0e, sideinputs {0=SimplePCollectionView{tag=Tag<org.apache.beam.sdk.values.PCollectionViews$SimplePCollectionView.<init>:467#dda1859988aa034b>}}
+ INFO 08-23 23:48:25,663 PipelineTranslator:258 [main] - pvalue tt: AlternatingLeastSquare.UpdateUserAndItemMatrix3/ParDo(CalculateNextMatrix)2/ParMultiDo(CalculateNextMatrix).output [PCollection]
+ INFO 08-23 23:48:25,664 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,664 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=MapElements} 
+ INFO 08-23 23:48:25,664 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=MapElements/Map} 
+ INFO 08-23 23:48:25,664 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=MapElements/Map/ParMultiDo(Anonymous)}, transform org.apache.beam.sdk.transforms.MapElements$1@77c1e611
+ INFO 08-23 23:48:25,680 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@4d157493, sideinputs {}
+ INFO 08-23 23:48:25,680 PipelineTranslator:258 [main] - pvalue tt: MapElements/Map/ParMultiDo(Anonymous).output [PCollection]
+ INFO 08-23 23:48:25,680 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,681 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write} 
+ INFO 08-23 23:48:25,681 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles} 
+ INFO 08-23 23:48:25,681 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/RewindowIntoGlobal} 
+ INFO 08-23 23:48:25,683 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/WriteUnshardedBundlesToTempFiles} 
+ INFO 08-23 23:48:25,683 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=TextIO.Write/WriteFiles/WriteUnshardedBundlesToTempFiles/WriteUnshardedBundles}, transform org.apache.beam.sdk.io.WriteFiles$WriteUnshardedTempFilesFn@60df7989
+Aug 23, 2020 11:48:25 PM org.apache.reef.runtime.local.driver.ResourceManager sendRuntimeStatus
+INFO: Allocated: 1, Outstanding requests: Optional:{0}
+Aug 23, 2020 11:48:25 PM org.apache.reef.runtime.local.driver.ResourceManager sendRuntimeStatus
+INFO: Allocated: 1, Outstanding requests: Optional:{0}
+ INFO 08-23 23:48:25,707 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@1e84f3c8, sideinputs {}
+ INFO 08-23 23:48:25,707 PipelineTranslator:258 [main] - pvalue tt: TextIO.Write/WriteFiles/WriteUnshardedBundlesToTempFiles/WriteUnshardedBundles.writtenRecords [PCollection]
+ INFO 08-23 23:48:25,708 PipelineTranslator:258 [main] - pvalue tt: TextIO.Write/WriteFiles/WriteUnshardedBundlesToTempFiles/WriteUnshardedBundles.unwrittenRecords [PCollection]
+ INFO 08-23 23:48:25,708 PipelineTranslationContext:234 [main] - register Additional output, tag Tag<unwrittenRecords>, output TextIO.Write/WriteFiles/WriteUnshardedBundlesToTempFiles/WriteUnshardedBundles.unwrittenRecords [PCollection]
+ INFO 08-23 23:48:25,708 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,708 PipelineTranslationContext:176 [main] - pvalueToTag.get unwrittenRecords
+ INFO 08-23 23:48:25,708 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/WriteUnshardedBundlesToTempFiles/WriteUnwritten} 
+ INFO 08-23 23:48:25,709 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=TextIO.Write/WriteFiles/WriteUnshardedBundlesToTempFiles/WriteUnwritten/ParMultiDo(WriteShardsIntoTempFiles)}, transform org.apache.beam.sdk.io.WriteFiles$WriteShardsIntoTempFilesFn@75fd65c
+ INFO 08-23 23:48:25,716 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@66a53104, sideinputs {}
+ INFO 08-23 23:48:25,717 PipelineTranslator:258 [main] - pvalue tt: TextIO.Write/WriteFiles/WriteUnshardedBundlesToTempFiles/WriteUnwritten/ParMultiDo(WriteShardsIntoTempFiles).output [PCollection]
+ INFO 08-23 23:48:25,717 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,717 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/WriteUnshardedBundlesToTempFiles/DropShardNum} 
+ INFO 08-23 23:48:25,718 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=TextIO.Write/WriteFiles/WriteUnshardedBundlesToTempFiles/DropShardNum/ParMultiDo(Anonymous)}, transform org.apache.beam.sdk.io.WriteFiles$WriteUnshardedBundlesToTempFiles$1@1b482cbf
+ INFO 08-23 23:48:25,724 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@5426cb36, sideinputs {}
+ INFO 08-23 23:48:25,725 PipelineTranslator:258 [main] - pvalue tt: TextIO.Write/WriteFiles/WriteUnshardedBundlesToTempFiles/DropShardNum/ParMultiDo(Anonymous).output [PCollection]
+ INFO 08-23 23:48:25,725 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,726 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/GatherTempFileResults} 
+ INFO 08-23 23:48:25,726 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/GatherTempFileResults/View.AsList} 
+ INFO 08-23 23:48:25,726 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/GatherTempFileResults/View.AsList/View.VoidKeyToMultimapMaterialization} 
+ INFO 08-23 23:48:25,726 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/GatherTempFileResults/View.AsList/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)} 
+ INFO 08-23 23:48:25,726 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=TextIO.Write/WriteFiles/GatherTempFileResults/View.AsList/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)/ParMultiDo(VoidKeyToMultimapMaterialization)}, transform org.apache.beam.sdk.transforms.View$VoidKeyToMultimapMaterialization$VoidKeyToMultimapMaterializationDoFn@9b5f3c7
+ INFO 08-23 23:48:25,731 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@48a2db72, sideinputs {}
+ INFO 08-23 23:48:25,731 PipelineTranslator:258 [main] - pvalue tt: TextIO.Write/WriteFiles/GatherTempFileResults/View.AsList/View.VoidKeyToMultimapMaterialization/ParDo(VoidKeyToMultimapMaterialization)/ParMultiDo(VoidKeyToMultimapMaterialization).output [PCollection]
+ INFO 08-23 23:48:25,731 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,732 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow} 
+ INFO 08-23 23:48:25,732 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Create.Values} 
+ INFO 08-23 23:48:25,732 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Reify.ReifyView} 
+ INFO 08-23 23:48:25,733 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Reify.ReifyView/ParDo(Anonymous)} 
+ INFO 08-23 23:48:25,733 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Reify.ReifyView/ParDo(Anonymous)/ParMultiDo(Anonymous)}, transform org.apache.beam.sdk.transforms.Reify$ReifyView$1@1e7f19b4
+ INFO 08-23 23:48:25,747 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@202ae86f, sideinputs {0=SimplePCollectionView{tag=Tag<org.apache.beam.sdk.values.PCollectionViews$SimplePCollectionView.<init>:467#da920844064c72eb>}}
+ INFO 08-23 23:48:25,748 PipelineTranslator:258 [main] - pvalue tt: TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Reify.ReifyView/ParDo(Anonymous)/ParMultiDo(Anonymous).output [PCollection]
+ INFO 08-23 23:48:25,748 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,748 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Values} 
+ INFO 08-23 23:48:25,748 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Values/Values} 
+ INFO 08-23 23:48:25,748 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Values/Values/Map} 
+ INFO 08-23 23:48:25,748 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Values/Values/Map/ParMultiDo(Anonymous)}, transform org.apache.beam.sdk.transforms.MapElements$1@2792b416
+Aug 23, 2020 11:48:25 PM org.apache.reef.runtime.local.driver.ResourceManager sendRuntimeStatus
+INFO: Allocated: 2, Outstanding requests: Optional:{0}
+Aug 23, 2020 11:48:25 PM org.apache.reef.runtime.local.driver.ResourceManager sendRuntimeStatus
+INFO: Allocated: 2, Outstanding requests: Optional:{0}
+ INFO 08-23 23:48:25,758 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@5fcd1c5f, sideinputs {}
+ INFO 08-23 23:48:25,758 PipelineTranslator:258 [main] - pvalue tt: TextIO.Write/WriteFiles/GatherTempFileResults/Reify.ReifyViewInGlobalWindow/Values/Values/Map/ParMultiDo(Anonymous).output [PCollection]
+ INFO 08-23 23:48:25,758 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,758 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles} 
+ INFO 08-23 23:48:25,759 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Finalize} 
+ INFO 08-23 23:48:25,759 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Finalize/ParMultiDo(Finalize)}, transform org.apache.beam.sdk.io.WriteFiles$FinalizeTempFileBundles$FinalizeFn@7e7e962d
+ INFO 08-23 23:48:25,766 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@3b7c80c6, sideinputs {}
+ INFO 08-23 23:48:25,767 PipelineTranslator:258 [main] - pvalue tt: TextIO.Write/WriteFiles/FinalizeTempFileBundles/Finalize/ParMultiDo(Finalize).output [PCollection]
+ INFO 08-23 23:48:25,767 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,767 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey} 
+ INFO 08-23 23:48:25,767 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Pair with random key} 
+ INFO 08-23 23:48:25,767 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Pair with random key/ParMultiDo(AssignShard)}, transform org.apache.beam.sdk.transforms.Reshuffle$ViaRandomKey$AssignShardFn@5438c17a
+Aug 23, 2020 11:48:25 PM org.apache.reef.runtime.common.driver.evaluator.AllocatedEvaluatorImpl makeRootServiceConfiguration
+INFO: No service configuration given and no ConfigurationProviders set.
+ INFO 08-23 23:48:25,775 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@68b734a8, sideinputs {}
+ INFO 08-23 23:48:25,775 PipelineTranslator:258 [main] - pvalue tt: TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Pair with random key/ParMultiDo(AssignShard).output [PCollection]
+ INFO 08-23 23:48:25,775 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,776 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle} 
+ INFO 08-23 23:48:25,776 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/Window.Into()} 
+ INFO 08-23 23:48:25,777 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/ReifyOriginalTimestamps} 
+ INFO 08-23 23:48:25,777 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/ReifyOriginalTimestamps/ParDo(Anonymous)} 
+ INFO 08-23 23:48:25,778 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/ReifyOriginalTimestamps/ParDo(Anonymous)/ParMultiDo(Anonymous)}, transform org.apache.beam.sdk.transforms.Reify$TimestampInValue$1@1f43cab7
+ INFO 08-23 23:48:25,790 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@553da911, sideinputs {}
+ INFO 08-23 23:48:25,790 PipelineTranslator:258 [main] - pvalue tt: TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/ReifyOriginalTimestamps/ParDo(Anonymous)/ParMultiDo(Anonymous).output [PCollection]
+ INFO 08-23 23:48:25,790 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,800 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/ExpandIterable} 
+ INFO 08-23 23:48:25,800 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/ExpandIterable/ParMultiDo(Anonymous)}, transform org.apache.beam.sdk.transforms.Reshuffle$1@4c51077d
+ INFO 08-23 23:48:25,808 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@71aaf151, sideinputs {}
+ INFO 08-23 23:48:25,809 PipelineTranslator:258 [main] - pvalue tt: TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/ExpandIterable/ParMultiDo(Anonymous).output [PCollection]
+ INFO 08-23 23:48:25,809 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,809 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/RestoreOriginalTimestamps} 
+ INFO 08-23 23:48:25,810 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/RestoreOriginalTimestamps/ReifyTimestamps.RemoveWildcard} 
+ INFO 08-23 23:48:25,810 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/RestoreOriginalTimestamps/ReifyTimestamps.RemoveWildcard/ParDo(Anonymous)} 
+ INFO 08-23 23:48:25,810 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/RestoreOriginalTimestamps/ReifyTimestamps.RemoveWildcard/ParDo(Anonymous)/ParMultiDo(Anonymous)}, transform org.apache.beam.sdk.transforms.ReifyTimestamps$RemoveWildcard$1@43ecfeb5
+Aug 23, 2020 11:48:25 PM org.apache.reef.runtime.common.driver.evaluator.AllocatedEvaluatorImpl makeRootServiceConfiguration
+INFO: No service configuration given and no ConfigurationProviders set.
+Aug 23, 2020 11:48:25 PM org.apache.reef.runtime.local.process.ReefRunnableProcessObserver onResourceStatus
+INFO: Sending resource status: ResourceStatusEventImpl:{id:Node-59-1598194105642, runtime:Node-59-1598194105642, state:RUNNING, diag:Optional.empty, exit:Optional.empty} 
+ INFO 08-23 23:48:25,818 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@66c9b52f, sideinputs {}
+ INFO 08-23 23:48:25,819 PipelineTranslator:258 [main] - pvalue tt: TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/RestoreOriginalTimestamps/ReifyTimestamps.RemoveWildcard/ParDo(Anonymous)/ParMultiDo(Anonymous).output [PCollection]
+ INFO 08-23 23:48:25,819 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,819 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/RestoreOriginalTimestamps/Reify.ExtractTimestampsFromValues} 
+ INFO 08-23 23:48:25,820 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/RestoreOriginalTimestamps/Reify.ExtractTimestampsFromValues/ParDo(Anonymous)} 
+ INFO 08-23 23:48:25,820 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/RestoreOriginalTimestamps/Reify.ExtractTimestampsFromValues/ParDo(Anonymous)/ParMultiDo(Anonymous)}, transform org.apache.beam.sdk.transforms.Reify$ExtractTimestampsFromValues$1@7e1ffe70
+Aug 23, 2020 11:48:25 PM org.apache.reef.runtime.local.process.ReefRunnableProcessObserver onResourceStatus
+INFO: Sending resource status: ResourceStatusEventImpl:{id:Node-58-1598194105697, runtime:Node-58-1598194105697, state:RUNNING, diag:Optional.empty, exit:Optional.empty} 
+ INFO 08-23 23:48:25,827 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@3635099, sideinputs {}
+ INFO 08-23 23:48:25,828 PipelineTranslator:258 [main] - pvalue tt: TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Reshuffle/RestoreOriginalTimestamps/Reify.ExtractTimestampsFromValues/ParDo(Anonymous)/ParMultiDo(Anonymous).output [PCollection]
+ INFO 08-23 23:48:25,828 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,828 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Values} 
+ INFO 08-23 23:48:25,828 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Values/Values} 
+ INFO 08-23 23:48:25,829 PipelineTranslationContext:82 [main] - PTCdongjoo, enterCompositeTransform Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Values/Values/Map} 
+ INFO 08-23 23:48:25,829 PipelineTranslator:248 [main] - PT, parDoMultiOutputTranslator, ctx org.apache.nemo.compiler.frontend.beam.PipelineTranslationContext@42b6d0cc beamnode Node{fullName=TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Values/Values/Map/ParMultiDo(Anonymous)}, transform org.apache.beam.sdk.transforms.MapElements$1@3e39baf0
+ INFO 08-23 23:48:25,835 PipelineTranslationContext:124 [main] - dongjoo PTC, addSideInputEdges dstver org.apache.nemo.common.ir.vertex.OperatorVertex@1e3ff233, sideinputs {}
+ INFO 08-23 23:48:25,835 PipelineTranslator:258 [main] - pvalue tt: TextIO.Write/WriteFiles/FinalizeTempFileBundles/Reshuffle.ViaRandomKey/Values/Values/Map/ParMultiDo(Anonymous).output [PCollection]
+ INFO 08-23 23:48:25,835 PipelineTranslator:266 [main] - dongjoo, parDoMultiOutput!
+ INFO 08-23 23:48:25,874 JobLauncher:280 [ForkJoinPool.commonPool-worker-51] - Waiting for the driver to be ready
+ INFO 08-23 23:48:27,223 JobLauncher:288 [ForkJoinPool.commonPool-worker-51] - Launching DAG...
+ INFO 08-23 23:48:27,289 JobLauncher:304 [ForkJoinPool.commonPool-worker-51] - Waiting for the DAG to finish execution
+Aug 23, 2020 11:48:27 PM com.github.fommil.netlib.LAPACK <clinit>
+WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeSystemLAPACK
+Aug 23, 2020 11:48:27 PM com.github.fommil.netlib.LAPACK <clinit>
+WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeRefLAPACK
+Aug 23, 2020 11:48:28 PM com.github.fommil.netlib.BLAS <clinit>
+WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeSystemBLAS
+Aug 23, 2020 11:48:28 PM com.github.fommil.netlib.BLAS <clinit>
+WARNING: Failed to load implementation from: com.github.fommil.netlib.NativeRefBLAS
+ INFO 08-23 23:48:33,329 JobLauncher:312 [ForkJoinPool.commonPool-worker-51] - DAG execution done
+ INFO 08-23 23:48:33,330 JobLauncher:193 [ForkJoinPool.commonPool-worker-51] - Wait for the driver to finish
+Aug 23, 2020 11:48:33 PM org.apache.reef.runtime.common.driver.defaults.DefaultEvaluatorCompletionHandler onNext
+INFO: Received CompletedEvaluator: CompletedEvaluator{id='Node-58-1598194105697'}
+Aug 23, 2020 11:48:33 PM org.apache.reef.runtime.common.driver.defaults.DefaultEvaluatorCompletionHandler onNext
+INFO: Received CompletedEvaluator: CompletedEvaluator{id='Node-59-1598194105642'}
+Aug 23, 2020 11:48:33 PM org.apache.reef.runtime.local.driver.ContainerManager release
+INFO: Releasing Container with containerId [ProcessContainer{containedID=Node-58-1598194105697, nodeID=Node-58, errorHandlerRID=socket://127.0.1.1:19663, folder=/home/dongjoo/incubator-nemo/REEF_LOCAL_RUNTIME/als-1598194103846/Node-58-1598194105697, rack=/default-rack}]
+Aug 23, 2020 11:48:33 PM org.apache.reef.runtime.local.driver.ProcessContainer close
+WARNING: Force-closing a container that is still running: ProcessContainer{containedID=Node-58-1598194105697, nodeID=Node-58, errorHandlerRID=socket://127.0.1.1:19663, folder=/home/dongjoo/incubator-nemo/REEF_LOCAL_RUNTIME/als-1598194103846/Node-58-1598194105697, rack=/default-rack}
+Aug 23, 2020 11:48:33 PM org.apache.reef.runtime.local.process.RunnableProcess cancel
+WARNING: The child process survived Process.destroy()
+Aug 23, 2020 11:48:33 PM org.apache.reef.runtime.local.process.RunnableProcess cancel
+WARNING: Attempting to kill the process via the kill command line
+Aug 23, 2020 11:48:33 PM org.apache.reef.runtime.local.driver.ResourceManager sendRuntimeStatus
+INFO: Allocated: 1, Outstanding requests: Optional:{0}
+Aug 23, 2020 11:48:33 PM org.apache.reef.runtime.local.driver.ContainerManager release
+INFO: Releasing Container with containerId [ProcessContainer{containedID=Node-59-1598194105642, nodeID=Node-59, errorHandlerRID=socket://127.0.1.1:19663, folder=/home/dongjoo/incubator-nemo/REEF_LOCAL_RUNTIME/als-1598194103846/Node-59-1598194105642, rack=/default-rack}]
+Aug 23, 2020 11:48:33 PM org.apache.reef.runtime.local.driver.ProcessContainer close
+WARNING: Force-closing a container that is still running: ProcessContainer{containedID=Node-59-1598194105642, nodeID=Node-59, errorHandlerRID=socket://127.0.1.1:19663, folder=/home/dongjoo/incubator-nemo/REEF_LOCAL_RUNTIME/als-1598194103846/Node-59-1598194105642, rack=/default-rack}
+Aug 23, 2020 11:48:33 PM org.apache.reef.runtime.local.process.RunnableProcess cancel
+WARNING: The child process survived Process.destroy()
+Aug 23, 2020 11:48:33 PM org.apache.reef.runtime.local.process.RunnableProcess cancel
+WARNING: Attempting to kill the process via the kill command line
+Aug 23, 2020 11:48:33 PM org.apache.reef.runtime.local.driver.ResourceManager sendRuntimeStatus
+INFO: Allocated: 0, Outstanding requests: Optional:{0}
+Aug 23, 2020 11:48:33 PM org.apache.reef.runtime.common.driver.idle.DriverIdleManager onPotentiallyIdle
+INFO: All components indicated idle. Initiating Driver shutdown.
+Aug 23, 2020 11:48:33 PM org.apache.reef.runtime.common.driver.DriverStatusManager onComplete
+INFO: Clean shutdown of the Driver.
+ INFO 08-23 23:48:36,075 JobLauncher:201 [ForkJoinPool.commonPool-worker-51] - Driver terminated
+ INFO 08-23 23:48:40,514 JobLauncher:214 [ForkJoinPool.commonPool-worker-51] - Job successfully completed
+ INFO 08-23 23:48:40,515 AlternatingLeastSquare:431 [main] - JCT 16506
+ INFO 08-23 23:48:40,515 JobLauncher:334 [main] - User program finished

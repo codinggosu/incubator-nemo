@@ -79,12 +79,13 @@ final class PipelineTranslationContext {
    * @param compositeTransform composite transform.
    */
   void enterCompositeTransform(final TransformHierarchy.Node compositeTransform) {
-    LOG.info("PTC, enterCompositeTransform {} ", compositeTransform);
+    LOG.info("PTCdongjoo, enterCompositeTransform {} ", compositeTransform);
     if (compositeTransform.getTransform() instanceof LoopCompositeTransform) {
       final LoopVertex loopVertex = new LoopVertex(compositeTransform.getFullName());
       builder.addVertex(loopVertex, loopVertexStack);
       builder.removeVertex(loopVertex);
       loopVertexStack.push(new LoopVertex(compositeTransform.getFullName()));
+      LOG.info("compositeTransform is actually a LoopTransform");
     }
   }
 
@@ -92,7 +93,7 @@ final class PipelineTranslationContext {
    * @param compositeTransform composite transform.
    */
   void leaveCompositeTransform(final TransformHierarchy.Node compositeTransform) {
-    LOG.info("PTC, leaveCompositeTransform {} ", compositeTransform);
+//    LOG.info("PTC, leaveCompositeTransform {} ", compositeTransform);
     if (compositeTransform.getTransform() instanceof LoopCompositeTransform) {
       loopVertexStack.pop();
     }
@@ -104,7 +105,7 @@ final class PipelineTranslationContext {
    * @param vertex IR vertex to add
    */
   void addVertex(final IRVertex vertex) {
-    LOG.info("PTC, addVertex, vertex {} ", vertex);
+//    LOG.info("PTC, addVertex, vertex {} ", vertex);
     builder.addVertex(vertex, loopVertexStack);
   }
 
@@ -159,7 +160,7 @@ final class PipelineTranslationContext {
    * @param input the {@link PValue} {@code dst} consumes
    */
   void addEdgeTo(final IRVertex dst, final PValue input) {
-    LOG.info("PTC, addEdgeto being called, dst {}, input {}", dst, input);
+//    LOG.info("PTC, addEdgeto being called, dst {}, input {}", dst, input);
     if (input instanceof PCollection) {
       final Coder elementCoder = ((PCollection) input).getCoder();
       final Coder windowCoder = ((PCollection) input).getWindowingStrategy().getWindowFn().windowCoder();
@@ -172,6 +173,7 @@ final class PipelineTranslationContext {
       final IREdge edge = new IREdge(communicationPattern, src, dst);
 
       if (pValueToTag.containsKey(input)) {
+        LOG.info("pvalueToTag.get {}", pValueToTag.get(input).getId());
         edge.setProperty(AdditionalOutputTagProperty.of(pValueToTag.get(input).getId()));
       }
 
@@ -187,7 +189,7 @@ final class PipelineTranslationContext {
    * @param windowCoder  window coder.
    */
   void addEdge(final IREdge edge, final Coder elementCoder, final Coder windowCoder) {
-    LOG.info("PTC, addEdge being called, edge {}, elementCoder {} windowCoder {}", edge, elementCoder, windowCoder);
+//    LOG.info("PTC, addEdge being called, edge {}, elementCoder {} windowCoder {}", edge, elementCoder, windowCoder);
 
     edge.setProperty(KeyExtractorProperty.of(new BeamKeyExtractor()));
     if (elementCoder instanceof KvCoder) {
@@ -229,6 +231,7 @@ final class PipelineTranslationContext {
                                     final IRVertex irVertex,
                                     final PValue output,
                                     final TupleTag<?> tag) {
+    LOG.info("register Additional output, tag {}, output {}", tag, output);
     pValueToProducerBeamNode.put(output, node);
     pValueToTag.put(output, tag);
     pValueToProducerVertex.put(output, irVertex);

@@ -39,22 +39,21 @@ public final class PipelineVisitor extends Pipeline.PipelineVisitor.Defaults {
    * @param pipelineOptions pipeline options.
    */
   public PipelineVisitor(final Pipeline pipeline, final NemoPipelineOptions pipelineOptions) {
-    LOG.info("PipelineVisitor constructor pipeline {}, pipelineOptions {}", pipeline, pipelineOptions);
+//    LOG.info("PipelineVisitor constructor pipeline {}, pipelineOptions {}", pipeline, pipelineOptions);
     this.context = new PipelineTranslationContext(pipeline, pipelineOptions);
   }
 
   @Override
   public void visitPrimitiveTransform(final TransformHierarchy.Node node) {
-    LOG.info("PipelineVisitor visitPrimitiveTransform node {}", node);
-
+//    LOG.info("PipelineVisitor visitPrimitiveTransform node {}", node);
     pipelineTranslator.translatePrimitive(context, node);
   }
 
   @Override
   public CompositeBehavior enterCompositeTransform(final TransformHierarchy.Node node) {
     final CompositeBehavior compositeBehavior = pipelineTranslator.translateComposite(context, node);
-    LOG.info("PipleLineVisitor enterCompositeTransform input node {}, compositebehavior {}, context {}",
-      node, compositeBehavior, context);
+//    LOG.info("PipleLineVisitor enterCompositeTransform input node {}, compositebehavior {}, context {}",
+//      node, compositeBehavior, context);
     // this should come after the above translateComposite, since this composite is a child of a previous composite.
     context.enterCompositeTransform(node);
     return compositeBehavior;
@@ -62,7 +61,7 @@ public final class PipelineVisitor extends Pipeline.PipelineVisitor.Defaults {
 
   @Override
   public void leaveCompositeTransform(final TransformHierarchy.Node node) {
-    LOG.info("PipeLineVisiter, leaveCompositeTransform node {}", node);
+//    LOG.info("PipeLineVisiter, leaveCompositeTransform node {}", node);
     context.leaveCompositeTransform(node);
   }
 
