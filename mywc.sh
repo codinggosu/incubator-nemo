@@ -17,17 +17,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
-#    -executor_json `pwd`/examples/resources/executors/beam_test_executor_resources.json \
-
 ./bin/run_beam.sh \
-    -job_id als \
-    -user_main org.apache.nemo.examples.beam.AlternatingLeastSquare \
+    -job_id beam_wordcount \
     -optimization_policy org.apache.nemo.compiler.optimizer.policy.DefaultPolicy \
-    -user_args "`pwd`/examples/resources/inputs/test_input_als 10 3 0.05 `pwd`/outputs/outputs-als" \
-    -executor_json "/home/dongjoo/nemo-test/files/my_ex_resources.json"
-
-
-
-cp ./REEF_LOCAL_RUNTIME/als-*/dag/plan-logical.json ~/Desktop/begin.json
-cp ./REEF_LOCAL_RUNTIME/als-*/dag/Plan*-final.json ~/Desktop/final.json
+    -user_main org.apache.nemo.examples.beam.BeamWordCount \
+    -user_args "--runner=NemoRunner --inputFile=/home/dongjoo/nemo-test/files/inputs/bad_wc_input --output=`pwd`/outputs/wordcount" \
+    -executor_json "/home/dongjoo/nemo-test/files/beam_test_executor_resources.json"
 

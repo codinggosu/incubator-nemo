@@ -19,7 +19,7 @@
 package org.apache.nemo.runtime.executor.data.stores;
 
 import org.apache.nemo.runtime.executor.data.MemoryPoolAssigner;
-import org.apache.nemo.common.exception.BlockFetchException;
+//import org.apache.nemo.common.exception.BlockFetchException;
 import org.apache.nemo.common.exception.BlockWriteException;
 import org.apache.nemo.conf.JobConf;
 import org.apache.nemo.runtime.executor.data.DataUtil;
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.concurrent.ThreadSafe;
 import javax.inject.Inject;
 import java.io.File;
-import java.io.IOException;
+//import java.io.IOException;
 
 /**
  * Stores blocks in local files.
@@ -106,12 +106,13 @@ public final class LocalFileStore extends LocalBlockStore {
     if (fileBlock == null) {
       return false;
     }
-    try {
-      fileBlock.deleteFile();
+//    try {
+    LOG.info("fileblock should have been deleted fileBlock {}", fileBlock);
+//      fileBlock.deleteFile();
 //      LOG.info("dongjoo, fileBlock, deleteFile for block {}", blockId);
-    } catch (final IOException e) {
-      throw new BlockFetchException(e);
-    }
+//    } catch (final IOException e) {
+//      throw new BlockFetchException(e);
+//    }
     return true;
   }
 }

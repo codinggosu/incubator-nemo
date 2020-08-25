@@ -31,6 +31,8 @@ import org.apache.nemo.runtime.executor.data.metadata.PartitionMetadata;
 import org.apache.nemo.runtime.executor.data.partition.NonSerializedPartition;
 import org.apache.nemo.runtime.executor.data.partition.SerializedPartition;
 import org.apache.nemo.runtime.executor.data.streamchainer.Serializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -67,6 +69,8 @@ public final class FileBlock<K extends Serializable> implements Block<K> {
   private final MemoryPoolAssigner memoryPoolAssigner;
   private static final String ALREADY_COMMITED = "The partition is already committed!";
   private static final String CANNOT_RETRIEVE_BEFORE_COMMITED = "Cannot retrieve elements before a block is committed!";
+  private static final Logger LOG = LoggerFactory.getLogger(FileBlock.class.getName());
+
 
   /**
    * Constructor.
@@ -100,17 +104,31 @@ public final class FileBlock<K extends Serializable> implements Block<K> {
    */
   private void writeToFile(final Iterable<SerializedPartition<K>> serializedPartitions)
     throws IOException {
+    LOG.info("dongjoo' FileBLock writeToFile filePath {}", filePath);
+    String backup = "/home/dongjoo/nemo-test/files/backup" + filePath.substring(7);
+//    try (FileChannel backupChannel = new FileOutputStream(backup, true).getChannel()) {
+//      for (final SerializedPartition<K> serializedPartition : serializedPartitions) {
+//        // Reserve a partition write and get the metadata.
+//        metadata.writePartitionMetadata(serializedPartition.getKey(), serializedPartition.getLength());
+//        for (final ByteBuffer buffer: serializedPartition.getDirectBufferList()) {
+//          fileOutputChannel.write(buffer);
+//        }
+//      }
     try (FileChannel fileOutputChannel = new FileOutputStream(filePath, true).getChannel()) {
+      File backupFile = new File(backup);
+//      FileOutputStream backupStream = new FileOutputStream(backupFile);
       for (final SerializedPartition<K> serializedPartition : serializedPartitions) {
         // Reserve a partition write and get the metadata.
         metadata.writePartitionMetadata(serializedPartition.getKey(), serializedPartition.getLength());
         for (final ByteBuffer buffer: serializedPartition.getDirectBufferList()) {
           fileOutputChannel.write(buffer);
+//            backupChannel.write(buffer);
         }
         // after the writing to disk, data in memory is released.
         serializedPartition.release();
       }
     }
+//    }
   }
 
   /**

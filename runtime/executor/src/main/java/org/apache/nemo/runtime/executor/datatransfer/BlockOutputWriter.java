@@ -147,6 +147,7 @@ public final class BlockOutputWriter implements OutputWriter {
         sizeTrackingVector.forEach(element -> blockToWrite.get().write(partitioner.partition(element), element));
         sizeTrackingVector.clear();
       } else { // block does not fit in memory
+        LOG.info("DONGJOO Block spilled!!!! blockid {}", blockId);
         this.outputSpilled = true;
         newBlockStoreValue = DataStoreProperty.Value.LOCAL_FILE_STORE;
         persistence = DataPersistenceProperty.Value.KEEP;
